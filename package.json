@@ -1,0 +1,115 @@
+{
+  "name": "messages-publisher",
+  "version": "1.0.0",
+  "author": "Sal Gerace",
+  "description": "A tool for publishing Apple Messages as a PDF",
+  "main": "main.js",
+  "scripts": {
+    "dist-mac": "npm run sass && electron-builder --mac",
+    "dist-windows": "npm run sass && electron-builder --win",
+    "eslint": "npx eslint --cache main renderer support main.js",
+    "postinstall": "electron-builder install-app-deps",
+    "sass": "npx sass sass/styles.scss assets/css/app.css",
+    "start": "node support/scripts/start.js"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.2"
+  },
+  "devDependencies": {
+    "beeper": "1.1.1",
+    "chalk": "4.1.2",
+    "chokidar": "3.5.3",
+    "electron": "21.2.2",
+    "electron-builder": "23.6.0",
+    "eslint": "8.26.0",
+    "lodash": "^4.17.21",
+    "minimatch": "^5.1.0",
+    "preprocess": "3.2.0",
+    "sass": "1.56.0",
+    "tiny-lr": "2.0.0"
+  },
+  "startConfig": {
+    "watch": [
+      "assets/css/app.css",
+      "main/**/*.{html,js}",
+      "renderer/**/*.{html,js}",
+      "support/**/*.js",
+      "main.js"
+    ],
+    "liveReload": {
+      "port": 35739,
+      "ignorePatterns": [
+        "support/**/*.js",
+        "main.js"
+      ]
+    }
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "amd": true,
+      "es6": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaVersion": "latest"
+    },
+    "globals": {},
+    "extends": "eslint:recommended",
+    "rules": {
+      "no-var": 2,
+      "prefer-const": 2,
+      "semi": 2
+    },
+    "overrides": [{
+      "files": [
+        "tasks/**/*.js"
+      ],
+      "env": {
+        "node": true
+      }
+    }]
+  },
+  "build": {
+    "productName": "Messages Publisher",
+    "appId": "org.sa6.messages-publisher",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg"
+      ]
+    },
+    "directories": {
+      "buildResources": "assets/build"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "publish": {
+      "provider": "github",
+      "releaseType": "prerelease"
+    },
+    "files": [
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/.github",
+      "!**/.ops",
+      "!**/sass",
+      "!**/scripts",
+      "!**/tasks"
+    ]
+  }
+}

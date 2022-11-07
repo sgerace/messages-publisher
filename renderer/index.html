@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <base href="./">
+    <title>Messages Publisher</title>
+
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+
+<body>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Main -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div id="main">
+        <button type="button" class="btn btn-primary">Primary</button>
+        <button type="button" class="btn btn-secondary">Secondary</button>
+        <button type="button" class="btn btn-success">Success</button>
+        <button type="button" class="btn btn-danger">Danger</button>
+        <button type="button" class="btn btn-warning">Warning</button>
+        <button type="button" class="btn btn-info">Info</button>
+        <button type="button" class="btn btn-light">Light</button>
+        <button type="button" class="btn btn-dark">Dark</button>
+    </div>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Script -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <script>
+    (function lru() {
+        process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+        if (process.env.DEBUG && process.env.LIVE_RELOAD_PORT) {
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.src = `http://localhost:${process.env.LIVE_RELOAD_PORT}/livereload.js`;
+            script.async = true;
+            script.type = 'text/javascript';
+            head.appendChild(script);
+        }
+    })();
+    require('./app.js');
+
+    </script>
+
+</body>
+
+</html>
