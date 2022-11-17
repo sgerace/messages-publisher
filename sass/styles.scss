@@ -2,10 +2,19 @@
  * Messages Publisher Styles
  */
 
-// Variable overrides first
-// $primary: #900;
-// $enable-shadows: true;
-// $prefix: "mo-";
-
 // Bootstrap
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+// Global application styles
+@import "./global/classes";
+@import "./global/colors";
+@import "./global/layout";
+
+// Component styles
+@import "./components/chatList";
+@import "./components/messageViewer";
+
+// Panel styles
+@import "./panels/bookPanel";
+@import "./panels/chatPanel";
+@import "./panels/sidebarPanel";

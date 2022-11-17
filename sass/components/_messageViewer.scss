@@ -1,0 +1,14 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Message Viewer Component Styles
+ */
+
+.mp-message-viewer {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    div.message-container {
+        display: flex;
+        flex-direction: column;
+    }
+}

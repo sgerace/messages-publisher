@@ -13,7 +13,9 @@
     "start": "node support/scripts/start.js"
   },
   "dependencies": {
-    "bootstrap": "^5.2.2"
+    "bootstrap": "^5.2.2",
+    "eventemitter3": "4.0.7",
+    "sqlite3": "5.1.2"
   },
   "devDependencies": {
     "beeper": "1.1.1",

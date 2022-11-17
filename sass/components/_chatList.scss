@@ -1,0 +1,19 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Chat List Component Styles
+ */
+
+.mp-chat-list {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .list-container {
+        overflow: auto;
+
+        ul {
+            li {
+                cursor: pointer;
+            }
+        }
+    }
+}

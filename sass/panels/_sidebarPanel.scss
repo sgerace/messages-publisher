@@ -1,0 +1,15 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Sidebar Panel Styles
+ */
+
+div#mp-sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    min-width: 400px;
+
+    .header {
+        background: $charcoal-70;
+        min-height: 40px;
+    }
+}
