@@ -9,7 +9,7 @@ const app = electron.app; // Module to control application life
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window
 
 // const dialog = electron.dialog;
-// const ipc = electron.ipcMain;
+const ipc = electron.ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -103,6 +103,14 @@ app.on('activate', function() {
     if (mainWindow === null) {
         createWindow();
     }
+});
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Handles
+
+ipc.handle('getUserDataPath', () => {
+    return app.getPath('userData');
 });
 
 

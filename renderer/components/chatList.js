@@ -10,6 +10,8 @@ const EventEmitter = require('eventemitter3');
 
 class ChatList extends EventEmitter {
 
+    #services = null;
+
     #chats = null;
 
     node = null;
@@ -25,9 +27,11 @@ class ChatList extends EventEmitter {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructor
 
-    constructor() {
+    constructor(services) {
         super();
+        this.#services = services;
         this.#initialize();
+        this.#initializeEvents();
     }
 
 
@@ -47,9 +51,7 @@ class ChatList extends EventEmitter {
         for (const [ /* key */ , value] of this.#chats) {
             const li = document.createElement('li');
             li.className = 'list-group-item';
-            if (!value.name) {
-                li.textContent = Array.from(value.handles.values()).join(', ');
-            }
+            li.textContent = this.#services.datastore.getChatName(value);
             li.dataset.chatId = value.id;
             ul.append(li);
         }
@@ -130,6 +132,22 @@ class ChatList extends EventEmitter {
 
         // Append to node
         this.node.append(filterGroup, this.#listContainer);
+    }
+
+    #initializeEvents() {
+        this.#services.datastore.on('chatNameChange', () => this.#updateChats());
+    }
+
+    #updateChats() {
+        let iter = this.#listGroup.firstChild;
+        while (iter) {
+            const chat = this.#chats.get(Number(iter.dataset.chatId));
+            const name = this.#services.datastore.getChatName(chat);
+            if (name !== iter.textContent) {
+                iter.textContent = name;
+            }
+            iter = iter.nextSibling;
+        }
     }
 }
 

@@ -60,7 +60,7 @@ class Messages {
             'FROM chat_message_join cmj ' +
             'JOIN message m ON m.ROWID = cmj.message_id ' +
             'LEFT JOIN message_attachment_join maj ON maj.message_id = cmj.message_id ' +
-            'WHERE cmj.chat_id = ?', [chatId]);
+            'WHERE cmj.chat_id = ?;', [chatId]);
         rows.sort((a, b) => a.date - b.date);
         return rows;
     }
@@ -72,11 +72,7 @@ class Messages {
     async #all(sql, params) {
         return new Promise((resolve, reject) => {
             this.#db.all(sql, params, (err, result) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
+                if (err) { reject(err); } else { resolve(result); }
             });
         });
     }
@@ -85,11 +81,7 @@ class Messages {
     async #run(sql, params) {
         return new Promise((resolve, reject) => {
             this.#db.run(sql, params, (err, result) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
+                if (err) { reject(err); } else { resolve(result); }
             });
         });
     }

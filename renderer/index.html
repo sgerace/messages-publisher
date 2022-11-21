@@ -7,6 +7,7 @@
     <title>Messages Publisher</title>
 
     <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -18,6 +19,27 @@
         <div id="mp-sidebar-panel"></div>
         <div id="mp-chat-panel"></div>
         <div id="mp-book-panel"></div>
+
+        <!-- Rename Chat Modal -->
+        <div class="modal fade" id="rename-chat-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="rename-chat-title">Rename Chat</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="rename-chat-name" placeholder="Chat name">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="rename-chat-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

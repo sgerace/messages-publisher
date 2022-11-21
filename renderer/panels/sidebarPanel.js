@@ -58,7 +58,7 @@ class Sidebar {
         headerSpan.textContent = 'Conversations';
         header.append(headerSpan);
 
-        this.#chatList = new ChatList();
+        this.#chatList = new ChatList(this.#services);
 
         this.node.append(header, this.#chatList.node);
     }

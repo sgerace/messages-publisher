@@ -10,20 +10,32 @@ const MessageViewer = require('../components/messageViewer');
 
 class ChatPanel {
 
-    #messageViewer = null;
+    // Private globals
     #services = null;
+    #modals = null;
 
-    node = null;
-
+    // Private data
     #chat = null;
+    #chatName = null;
+
+    // Private elements
+    #headerSpan = null;
+
+    // Private components
+    #messageViewer = null;
+
+    // Public variables
+    node = null;
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructor
 
-    constructor(services) {
+    constructor(services, modals) {
         this.#services = services;
+        this.#modals = modals;
         this.#initialize();
+        this.#initializeEvents();
     }
 
 
@@ -41,7 +53,9 @@ class ChatPanel {
             return;
         }
         this.#chat = chat;
-        const messages = await this.#services.messages.getMessagesByChat(chat.id);
+        this.#updateChatName();
+
+        const messages = await this.#services.messages.getMessagesByChat(this.#chat.id);
         this.#messageViewer.setMessages(messages);
     }
 
@@ -55,16 +69,37 @@ class ChatPanel {
         // Initialize header
         const header = document.createElement('nav');
         header.className = 'navbar navbar-dark bg-dark';
-        const headerSpan = document.createElement('span');
-        headerSpan.className = 'navbar-brand';
-        headerSpan.textContent = 'Messages';
-        header.append(headerSpan);
+        this.#headerSpan = document.createElement('span');
+        this.#headerSpan.className = 'navbar-brand';
+        this.#headerSpan.textContent = 'Messages';
+
+        // Initialize rename button
+        const renameButton = document.createElement('button');
+        renameButton.className = 'btn btn-secondary';
+        renameButton.addEventListener('click', () => {
+            this.#modals.renameChat.open(this.#chat, this.#chatName);
+        });
+        const renameIcon = document.createElement('i');
+        renameIcon.className = 'bi bi-pencil-square';
+        renameButton.append(renameIcon);
+
+        // Append header items
+        header.append(this.#headerSpan, renameButton);
 
         // Initialize message viewer
         this.#messageViewer = new MessageViewer();
 
         // Append components to node
         this.node.append(header, this.#messageViewer.node);
+    }
+
+    #initializeEvents() {
+        this.#services.datastore.on('chatNameChange', () => this.#updateChatName());
+    }
+
+    #updateChatName() {
+        this.#chatName = this.#services.datastore.getChatName(this.#chat);
+        this.#headerSpan.textContent = this.#chatName;
     }
 }
 
@@ -73,7 +108,7 @@ class ChatPanel {
 // Export singleton
 
 module.exports = {
-    create: (services) => {
-        return new ChatPanel(services);
+    create: (services, modals) => {
+        return new ChatPanel(services, modals);
     }
 };
