@@ -98,7 +98,7 @@ class ChatPanel {
     }
 
     #updateChatName() {
-        this.#chatName = this.#services.datastore.getChatName(this.#chat);
+        this.#chatName = this.#services.datastore.resolveChatName(this.#chat).value;
         this.#headerSpan.textContent = this.#chatName;
     }
 }

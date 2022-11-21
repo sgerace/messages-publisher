@@ -35,7 +35,7 @@ const sidebarPanel = require('./panels/sidebarPanel').create(services);
 const chatPanel = require('./panels/chatPanel').create(services, modals);
 const bookPanel = require('./panels/bookPanel').create(services);
 
-sidebarPanel.chatList.on('activeChange', (chat) => chatPanel.setChat(chat));
+sidebarPanel.chatsSidebar.on('activeChange', (chat) => chatPanel.setChat(chat));
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

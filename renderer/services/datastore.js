@@ -52,9 +52,12 @@ class Datastore extends EventEmitter {
         await this.#initializeChatNames();
     }
 
-    getChatName(chat) {
+    resolveChatName(chat) {
         const name = this.#chatNames.get(chat.id);
-        return name ? name : Array.from(chat.handles.values()).join(', ');
+        return {
+            hasName: !!name,
+            value: name ? name : Array.from(chat.handles.values()).join(', ')
+        };
     }
 
     getHandleName(id) {

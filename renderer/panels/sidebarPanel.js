@@ -2,7 +2,7 @@
  * Sidebar Panel
  */
 
-const ChatList = new require('../components/chatList');
+const ChatsSidebar = new require('./sidebars/chatsSidebar');
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -10,7 +10,7 @@ const ChatList = new require('../components/chatList');
 
 class Sidebar {
 
-    #chatList = null;
+    #chatsSidebar = null;
     #services = null;
 
     node = null;
@@ -28,7 +28,7 @@ class Sidebar {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public properties
 
-    get chatList() { return this.#chatList; }
+    get chatsSidebar() { return this.#chatsSidebar; }
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,7 +40,7 @@ class Sidebar {
 
     async refresh() {
         const chats = await this.#services.messages.getChats();
-        this.#chatList.setChats(chats);
+        this.#chatsSidebar.setChats(chats);
     }
 
 
@@ -50,17 +50,11 @@ class Sidebar {
     #initialize() {
         this.node = document.getElementById('mp-sidebar-panel');
 
-        // Initialize header
-        const header = document.createElement('nav');
-        header.className = 'navbar navbar-dark bg-dark';
-        const headerSpan = document.createElement('span');
-        headerSpan.className = 'navbar-brand';
-        headerSpan.textContent = 'Conversations';
-        header.append(headerSpan);
+        // Initialize sidebars
+        this.#chatsSidebar = new ChatsSidebar(this.#services);
 
-        this.#chatList = new ChatList(this.#services);
-
-        this.node.append(header, this.#chatList.node);
+        // Append sidebars
+        this.node.append(this.#chatsSidebar.node);
     }
 }
 

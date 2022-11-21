@@ -16,10 +16,38 @@
     <!-- Main -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <div id="main">
-        <div id="mp-sidebar-panel"></div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Sidebar Panel-->
+        <div id="mp-sidebar-panel">
+
+            <!-- Chats Sidebar -->
+            <div id="mp-chats-sidebar">
+                <nav class="navbar navbar-dark bg-dark">
+                    <span class="navbar-brand">Chats</span>
+                </nav>
+                <div class="sidebar-filter-container">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="mp-chats-sidebar-filter-only-named">
+                        <label class="form-check-label" for="chats-filter-toggle">Only show named chats</label>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">Filter Chats:</label>
+                        <input class="form-control" type="text" id="mp-chats-sidebar-filter-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Chat Panel -->
         <div id="mp-chat-panel"></div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Book Panel -->
         <div id="mp-book-panel"></div>
 
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Rename Chat Modal -->
         <div class="modal fade" id="rename-chat-modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">

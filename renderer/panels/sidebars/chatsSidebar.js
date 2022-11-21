@@ -1,5 +1,5 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Chat List Component
+ * Chats Sidebar
  */
 
 const EventEmitter = require('eventemitter3');
@@ -8,14 +8,16 @@ const EventEmitter = require('eventemitter3');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class
 
-class ChatList extends EventEmitter {
+class ChatsSidebar extends EventEmitter {
 
+    // Private globals
     #services = null;
 
     #chats = null;
 
     node = null;
 
+    #filterOnlyNamed = null;
     #filterInput = null;
 
     #listContainer = null;
@@ -51,8 +53,10 @@ class ChatList extends EventEmitter {
         for (const [ /* key */ , value] of this.#chats) {
             const li = document.createElement('li');
             li.className = 'list-group-item';
-            li.textContent = this.#services.datastore.getChatName(value);
+            const resolved = this.#services.datastore.resolveChatName(value);
+            li.textContent = resolved.value;
             li.dataset.chatId = value.id;
+            li.dataset.hasName = resolved.hasName;
             ul.append(li);
         }
 
@@ -66,51 +70,42 @@ class ChatList extends EventEmitter {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Private methods
 
-    #applyFilter(value) {
+    #applyFilter() {
+        const filterOnlyNamed = this.#filterOnlyNamed.checked;
+        const filterValue = this.#filterInput.value;
+        const tokens = filterValue ? filterValue.split(' ') : [];
         let iter = this.#listGroup.firstChild;
-        if (!value) {
-            while (iter) {
-                iter.classList.remove('hidden');
-                iter = iter.nextSibling;
+        while (iter) {
+            const name = iter.textContent;
+            let visible = true;
+            if (filterOnlyNamed && iter.dataset.hasName !== 'true') {
+                visible = false;
             }
-        } else {
-            const tokens = value ? value.split(' ') : null;
-            while (iter) {
-                const name = iter.textContent;
-                let visible = true;
+            if (visible) {
                 for (let i = 0; i < tokens.length; ++i) {
                     if (!name.includes(tokens[i])) {
                         visible = false;
                         break;
                     }
                 }
-                if (visible) {
-                    iter.classList.remove('hidden');
-                } else {
-                    iter.classList.add('hidden');
-                }
-                iter = iter.nextSibling;
             }
+            if (visible) {
+                iter.classList.remove('hidden');
+            } else {
+                iter.classList.add('hidden');
+            }
+            iter = iter.nextSibling;
         }
     }
 
     #initialize() {
-        this.node = document.createElement('div');
-        this.node.className = 'mp-chat-list';
+        this.node = document.getElementById('mp-chats-sidebar');
 
-        // Initialize filter group
-        const filterGroup = document.createElement('div');
-        filterGroup.className = 'input-group mb-3';
-        const filterSpan = document.createElement('label');
-        filterSpan.className = 'input-group-text';
-        filterSpan.textContent = 'Filter Chats:';
-        this.#filterInput = document.createElement('input');
-        this.#filterInput.type = 'text';
-        this.#filterInput.className = 'form-control';
-        this.#filterInput.addEventListener('input', () => {
-            this.#applyFilter(this.#filterInput.value);
-        });
-        filterGroup.append(filterSpan, this.#filterInput);
+        // Initialize filter controls
+        this.#filterOnlyNamed = document.getElementById('mp-chats-sidebar-filter-only-named');
+        this.#filterOnlyNamed.addEventListener('change', () => this.#applyFilter());
+        this.#filterInput = document.getElementById('mp-chats-sidebar-filter-input');
+        this.#filterInput.addEventListener('input', () => this.#applyFilter());
 
         // Initialize list container and group
         this.#listContainer = document.createElement('div');
@@ -131,7 +126,7 @@ class ChatList extends EventEmitter {
         this.#listContainer.append(this.#listGroup);
 
         // Append to node
-        this.node.append(filterGroup, this.#listContainer);
+        this.node.append(this.#listContainer);
     }
 
     #initializeEvents() {
@@ -140,13 +135,22 @@ class ChatList extends EventEmitter {
 
     #updateChats() {
         let iter = this.#listGroup.firstChild;
+        let updated = false;
         while (iter) {
             const chat = this.#chats.get(Number(iter.dataset.chatId));
-            const name = this.#services.datastore.getChatName(chat);
-            if (name !== iter.textContent) {
-                iter.textContent = name;
+            const resolved = this.#services.datastore.resolveChatName(chat);
+            if (resolved.value !== iter.textContent) {
+                iter.textContent = resolved.value;
+                updated = true;
+            }
+            if (resolved.hasName !== iter.dataset.hasName) {
+                iter.dataset.hasName = resolved.hasName;
+                updated = true;
             }
             iter = iter.nextSibling;
+        }
+        if (updated) {
+            this.#applyFilter();
         }
     }
 }
@@ -155,4 +159,4 @@ class ChatList extends EventEmitter {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Exports
 
-module.exports = ChatList;
+module.exports = ChatsSidebar;
