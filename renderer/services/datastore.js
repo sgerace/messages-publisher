@@ -50,18 +50,25 @@ class Datastore extends EventEmitter {
 
         // Initialize data
         await this.#initializeChatNames();
+        await this.#initializeHandleNames();
     }
 
     resolveChatName(chat) {
         const name = this.#chatNames.get(chat.id);
         return {
             hasName: !!name,
-            value: name ? name : Array.from(chat.handles.values()).join(', ')
+            value: name ? name : Array.from(chat.handles.values()).map(handleId => {
+                return this.resolveHandleName(handleId).value;
+            }).join(', ')
         };
     }
 
-    getHandleName(id) {
-        return this.#handleNames.get(id);
+    resolveHandleName(id) {
+        const name = this.#handleNames.get(id);
+        return {
+            hasName: !!name,
+            value: name ? name : id
+        };
     }
 
     async setChatName(id, name) {
@@ -79,6 +86,7 @@ class Datastore extends EventEmitter {
             $name: name
         });
         this.#handleNames.set(id, name);
+        this.emit('handleNameChange', id, name);
     }
 
 
@@ -102,11 +110,24 @@ class Datastore extends EventEmitter {
             '  name TEXT NOT NULL',
             ');'
         ].join(''));
+
+        // Ensure handles table exists
+        await this.#run([
+            'CREATE TABLE IF NOT EXISTS handles (',
+            '  handle_id TEXT PRIMARY KEY,',
+            '  name TEXT NOT NULL',
+            ');'
+        ].join(''));
     }
 
     async #initializeChatNames() {
         const chatNames = await this.#all('SELECT * FROM chats;');
         chatNames.forEach(x => this.#chatNames.set(x.chat_id, x.name));
+    }
+
+    async #initializeHandleNames() {
+        const handleNames = await this.#all('SELECT * FROM handles;');
+        handleNames.forEach(x => this.#handleNames.set(x.handle_id, x.name));
     }
 
     async #run(sql, params) {

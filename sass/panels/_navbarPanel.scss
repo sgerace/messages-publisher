@@ -1,0 +1,33 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Navbar Panel Styles
+ */
+
+div#mp-navbar-panel {
+    background: #ebebeb;
+    box-shadow: inset -7px 0 9px -7px #aaa;
+    display: flex;
+    flex-direction: column;
+    max-width: 62px;
+    min-width: 62px;
+
+    .navbar-item {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        max-height: 62px;
+        min-height: 62px;
+
+        i {
+            font-size: 1.5em;
+        }
+
+        span {
+            font-size: 0.8em;
+        }
+
+        &.active {
+            color: blue;
+        }
+    }
+}

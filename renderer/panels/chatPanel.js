@@ -77,7 +77,8 @@ class ChatPanel {
         const renameButton = document.createElement('button');
         renameButton.className = 'btn btn-secondary';
         renameButton.addEventListener('click', () => {
-            this.#modals.renameChat.open(this.#chat, this.#chatName);
+            const resolved = this.#services.datastore.resolveChatName(this.#chat);
+            this.#modals.renameChat.open(this.#chat, resolved.hasName ? resolved.value : '');
         });
         const renameIcon = document.createElement('i');
         renameIcon.className = 'bi bi-pencil-square';

@@ -1,5 +1,5 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Rename Chat Modal
+ * Rename Person Modal
  */
 
 const bootstrap = require('bootstrap');
@@ -8,7 +8,7 @@ const bootstrap = require('bootstrap');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Modal
 
-class RenameChatModal {
+class RenamePersonModal {
 
     // Private globals
     #services = null;
@@ -19,7 +19,7 @@ class RenameChatModal {
     #submitButton = null;
 
     // Private data
-    #chat = null;
+    #id = null;
 
     // Public variables
     node = null;
@@ -37,8 +37,8 @@ class RenameChatModal {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public methods
 
-    open(chat, name) {
-        this.#chat = chat;
+    open(id, name) {
+        this.#id = id;
         this.#nameInput.value = name || '';
         this.#modal.show();
     }
@@ -48,7 +48,7 @@ class RenameChatModal {
     // Private methods
 
     #initialize() {
-        this.node = document.getElementById('rename-chat-modal');
+        this.node = document.getElementById('rename-person-modal');
         this.node.addEventListener('shown.bs.modal', () => this.#nameInput.focus());
         this.node.querySelector('form').addEventListener('submit', (ev) => {
             ev.preventDefault();
@@ -59,14 +59,14 @@ class RenameChatModal {
             }
         });
         this.#modal = new bootstrap.Modal(this.node);
-        this.#nameInput = document.getElementById('rename-chat-name');
-        const submitButton = document.getElementById('rename-chat-submit');
+        this.#nameInput = document.getElementById('rename-person-name');
+        const submitButton = document.getElementById('rename-person-submit');
         submitButton.addEventListener('click', () => this.#submit());
     }
 
     async #submit() {
         const name = this.#nameInput.value;
-        await this.#services.datastore.setChatName(this.#chat.id, name);
+        await this.#services.datastore.setHandleName(this.#id, name);
         this.#modal.hide();
     }
 }
@@ -77,6 +77,6 @@ class RenameChatModal {
 
 module.exports = {
     create: (services) => {
-        return new RenameChatModal(services);
+        return new RenamePersonModal(services);
     }
 };

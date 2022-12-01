@@ -18,11 +18,28 @@
     <div id="main">
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <!-- Sidebar Panel-->
+        <!-- Root Navbar -->
+        <div id="mp-navbar-panel">
+            <div class="navbar-item" data-name="chats">
+                <i class="bi bi-chat"></i>
+                <span>Chats</span>
+            </div>
+            <div class="navbar-item" data-name="people">
+                <i class="bi bi-people"></i>
+                <span>People</span>
+            </div>
+            <div class="navbar-item" data-name="books">
+                <i class="bi bi-book"></i>
+                <span>Books</span>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Sidebar Panel -->
         <div id="mp-sidebar-panel">
 
             <!-- Chats Sidebar -->
-            <div id="mp-chats-sidebar">
+            <div id="mp-chats-sidebar" class="hidden">
                 <nav class="navbar navbar-dark bg-dark">
                     <span class="navbar-brand">Chats</span>
                 </nav>
@@ -34,6 +51,23 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text">Filter Chats:</label>
                         <input class="form-control" type="text" id="mp-chats-sidebar-filter-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- People Sidebar -->
+            <div id="mp-people-sidebar" class="hidden">
+                <nav class="navbar navbar-dark bg-dark">
+                    <span class="navbar-brand">People</span>
+                </nav>
+                <div class="sidebar-filter-container">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="mp-people-sidebar-filter-only-named">
+                        <label class="form-check-label" for="people-filter-toggle">Only show named people</label>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">Filter People:</label>
+                        <input class="form-control" type="text" id="mp-people-sidebar-filter-input">
                     </div>
                 </div>
             </div>
@@ -56,14 +90,36 @@
                         <h1 class="modal-title fs-5" id="rename-chat-title">Rename Chat</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <form class="modal-body">
                         <div class="mb-3">
                             <input type="text" class="form-control" id="rename-chat-name" placeholder="Chat name">
                         </div>
-                    </div>
+                    </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="rename-chat-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Rename Person Modal -->
+        <div class="modal fade" id="rename-person-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="rename-person-title">Rename Person</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="rename-person-name" placeholder="person name">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="rename-person-submit">Save</button>
                     </div>
                 </div>
             </div>

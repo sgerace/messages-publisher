@@ -51,7 +51,7 @@ Sass.prototype.start = function() {
 
     // Spawn child process
     console.log(chalk.magenta('Starting Sass...'));
-    this._process = spawn(this.command, this.args, { stdio: 'inherit' });
+    this._process = spawn(this.command, this.args, { stdio: 'inherit', shell: true });
 };
 
 Sass.prototype.stop = function() {
