@@ -55,6 +55,13 @@ class Messages {
         return lookup;
     }
 
+    async getHandles() {
+        const rows = await this.#all('SELECT id FROM handle;');
+        const handles = new Set();
+        rows.forEach(x => handles.add(x.id));
+        return handles;
+    }
+
     async getMessagesByChat(chatId) {
         const rows = await this.#all('SELECT m.handle_id, m.text, m.date, maj.attachment_id ' +
             'FROM chat_message_join cmj ' +

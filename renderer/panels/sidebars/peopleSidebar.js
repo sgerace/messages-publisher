@@ -1,5 +1,5 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Chats Sidebar
+ * People Sidebar
  */
 
 const EventEmitter = require('eventemitter3');
@@ -8,12 +8,13 @@ const EventEmitter = require('eventemitter3');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class
 
-class ChatsSidebar extends EventEmitter {
+class PeopleSidebar extends EventEmitter {
 
     // Private globals
     #services = null;
+    #modals = null;
 
-    #chats = null;
+    #handles = null;
 
     node = null;
 
@@ -23,15 +24,14 @@ class ChatsSidebar extends EventEmitter {
     #listContainer = null;
     #listGroup = null;
 
-    #selectedChat = null;
-
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructor
 
-    constructor(services) {
+    constructor(services, modals) {
         super();
         this.#services = services;
+        this.#modals = modals;
         this.#initialize();
         this.#initializeEvents();
     }
@@ -48,20 +48,20 @@ class ChatsSidebar extends EventEmitter {
         return !this.node.classList.contains('hidden');
     }
 
-    setChats(chats) {
-        this.#chats = chats;
+    setHandles(handles) {
+        this.#handles = handles;
 
         // Create list
         const ul = document.createElement('ul');
         ul.className = 'list-group list-group-flush';
 
         // Initialize items
-        for (const [ /* key */ , value] of this.#chats) {
+        for (const id of this.#handles) {
             const li = document.createElement('li');
             li.className = 'list-group-item';
-            const resolved = this.#services.datastore.resolveChatName(value);
+            const resolved = this.#services.datastore.resolveHandleName(id);
             li.textContent = resolved.value;
-            li.dataset.id = value.id;
+            li.dataset.id = id;
             li.dataset.hasName = resolved.hasName;
             ul.append(li);
         }
@@ -88,34 +88,16 @@ class ChatsSidebar extends EventEmitter {
         const tokens = filterValue ? filterValue.split(' ') : [];
         let iter = this.#listGroup.firstChild;
         while (iter) {
-            const chat = this.#chats.get(Number(iter.dataset.id));
-            const resolved = this.#services.datastore.resolveChatName(chat);
-
-            // const name = iter.textContent;
+            const id = iter.dataset.id;
+            const name = iter.textContent;
             let visible = true;
             if (filterOnlyNamed && iter.dataset.hasName !== 'true') {
                 visible = false;
             }
             if (visible) {
                 for (let i = 0; i < tokens.length; ++i) {
-                    const token = tokens[i].toLowerCase();
-                    let tokenValid = false;
-                    if (resolved.hasName && resolved.value.toLowerCase().includes(token)) {
-                        tokenValid = true;
-                    } else {
-                        for (const handle of chat.handles) {
-                            if (handle.toLowerCase().includes(token)) {
-                                tokenValid = true;
-                                break;
-                            }
-                            const res = this.#services.datastore.resolveHandleName(handle);
-                            if (res.hasName && res.value.toLowerCase().includes(token)) {
-                                tokenValid = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!tokenValid) {
+                    const token = tokens[i];
+                    if (!name.includes(token) && !id.includes(token)) {
                         visible = false;
                         break;
                     }
@@ -131,31 +113,24 @@ class ChatsSidebar extends EventEmitter {
     }
 
     #initialize() {
-        this.node = document.getElementById('mp-chats-sidebar');
+        this.node = document.getElementById('mp-people-sidebar');
 
         // Initialize filter controls
-        this.#filterOnlyNamed = document.getElementById('mp-chats-sidebar-filter-only-named');
+        this.#filterOnlyNamed = document.getElementById('mp-people-sidebar-filter-only-named');
         this.#filterOnlyNamed.addEventListener('change', () => {
-            localStorage.setItem('chatsFilterOnlyNamed', this.#filterOnlyNamed.checked);
+            localStorage.setItem('peopleFilterOnlyNamed', this.#filterOnlyNamed.checked);
             this.#applyFilter();
         });
-        this.#filterOnlyNamed.checked = localStorage.getItem('chatsFilterOnlyNamed') === 'true';
-        this.#filterInput = document.getElementById('mp-chats-sidebar-filter-input');
+        this.#filterOnlyNamed.checked = localStorage.getItem('peopleFilterOnlyNamed') === 'true';
+        this.#filterInput = document.getElementById('mp-people-sidebar-filter-input');
         this.#filterInput.addEventListener('input', () => this.#applyFilter());
 
         // Initialize list container and group
         this.#listContainer = document.createElement('div');
         this.#listContainer.className = 'list-container';
         this.#listContainer.addEventListener('click', (ev) => {
-            const chat = this.#chats.get(Number(ev.target.dataset.id));
-            if (!this.#selectedChat || this.#selectedChat.id !== chat.id) {
-                const active = this.#listGroup.querySelector('.active');
-                if (active) {
-                    active.classList.remove('active');
-                }
-                ev.target.classList.add('active');
-                this.emit('activeChange', chat);
-            }
+            const name = ev.target.dataset.hasName === 'true' ? ev.target.textContent : '';
+            this.#modals.renamePerson.open(ev.target.dataset.id, name);
         });
         this.#listGroup = document.createElement('ul');
         this.#listGroup.className = 'list-group list-group-flush';
@@ -166,21 +141,20 @@ class ChatsSidebar extends EventEmitter {
     }
 
     #initializeEvents() {
-        this.#services.datastore.on('chatNameChange', () => this.#updateChats());
-        this.#services.datastore.on('handleNameChange', () => this.#updateChats());
+        this.#services.datastore.on('handleNameChange', () => this.#updateHandles());
     }
 
-    #updateChats() {
+    #updateHandles() {
         let iter = this.#listGroup.firstChild;
         let updated = false;
         while (iter) {
-            const chat = this.#chats.get(Number(iter.dataset.id));
-            const resolved = this.#services.datastore.resolveChatName(chat);
+            const id = iter.dataset.id;
+            const resolved = this.#services.datastore.resolveHandleName(id);
             if (resolved.value !== iter.textContent) {
                 iter.textContent = resolved.value;
                 updated = true;
             }
-            if (resolved.hasName !== iter.dataset.hasName) {
+            if (resolved.hasName !== (iter.dataset.hasName === 'true')) {
                 iter.dataset.hasName = resolved.hasName;
                 updated = true;
             }
@@ -196,4 +170,4 @@ class ChatsSidebar extends EventEmitter {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Exports
 
-module.exports = ChatsSidebar;
+module.exports = PeopleSidebar;

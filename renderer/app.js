@@ -24,18 +24,28 @@ const services = {
 // Modals
 
 const modals = {
-    renameChat: require('./modals/renameChatModal').create(services)
+    renameChat: require('./modals/renameChatModal').create(services),
+    renamePerson: require('./modals/renamePersonModal').create(services)
 };
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Panels
 
-const sidebarPanel = require('./panels/sidebarPanel').create(services);
+const navbarPanel = require('./panels/navbarPanel').create(services);
+const sidebarPanel = require('./panels/sidebarPanel').create(services, modals);
 const chatPanel = require('./panels/chatPanel').create(services, modals);
 const bookPanel = require('./panels/bookPanel').create(services);
 
-sidebarPanel.chatsSidebar.on('activeChange', (chat) => chatPanel.setChat(chat));
+// Manage and initialize active sidebar
+navbarPanel.on('activeChange', (active) => {
+    sidebarPanel.setActive(active);
+    localStorage.setItem('activeSidebar', active);
+});
+navbarPanel.setActive(localStorage.getItem('activeSidebar') || 'chats');
+
+// Connect active chat event
+sidebarPanel.sidebars.chats.on('activeChange', (chat) => chatPanel.setChat(chat));
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

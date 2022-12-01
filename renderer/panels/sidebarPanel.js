@@ -3,44 +3,54 @@
  */
 
 const ChatsSidebar = new require('./sidebars/chatsSidebar');
+const PeopleSidebar = new require('./sidebars/peopleSidebar');
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class
 
-class Sidebar {
+class SidebarPanel {
 
-    #chatsSidebar = null;
+    // Private globals
     #services = null;
+    #modals = null;
 
+    // Public variables
     node = null;
+    sidebars = null;
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructor
 
-    constructor(services) {
+    constructor(services, modals) {
         this.#services = services;
+        this.#modals = modals;
         this.#initialize();
     }
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Public properties
-
-    get chatsSidebar() { return this.#chatsSidebar; }
-
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public methods
-
-    async open() {
-        return false;
-    }
 
     async refresh() {
         const chats = await this.#services.messages.getChats();
-        this.#chatsSidebar.setChats(chats);
+        const handles = await this.#services.messages.getHandles();
+        this.sidebars.chats.setChats(chats);
+        this.sidebars.people.setHandles(handles);
+    }
+
+    setActive(name) {
+        if (this.sidebars[name].isVisible()) {
+            return;
+        }
+        for (const p in this.sidebars) {
+            if (p === name) {
+                this.sidebars[p].show();
+            } else {
+                this.sidebars[p].hide();
+            }
+        }
     }
 
 
@@ -51,10 +61,10 @@ class Sidebar {
         this.node = document.getElementById('mp-sidebar-panel');
 
         // Initialize sidebars
-        this.#chatsSidebar = new ChatsSidebar(this.#services);
-
-        // Append sidebars
-        this.node.append(this.#chatsSidebar.node);
+        this.sidebars = {
+            chats: new ChatsSidebar(this.#services, this.#modals),
+            people: new PeopleSidebar(this.#services, this.#modals)
+        };
     }
 }
 
@@ -63,7 +73,7 @@ class Sidebar {
 // Export singleton
 
 module.exports = {
-    create: (services) => {
-        return new Sidebar(services);
+    create: (services, modals) => {
+        return new SidebarPanel(services, modals);
     }
 };
