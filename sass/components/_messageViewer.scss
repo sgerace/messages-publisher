@@ -10,5 +10,62 @@
     div.message-container {
         display: flex;
         flex-direction: column;
+        font-family: 'Arial';
+        user-select: none;
+
+        div.year {
+            background: $charcoal-25;
+            max-height: 40px;
+            min-height: 40px;
+            cursor: pointer;
+        }
+
+        div.month {
+            background: $charcoal-10;
+            max-height: 30px;
+            min-height: 30px;
+            cursor: pointer;
+        }
+
+        span.date {
+            align-self: center;
+            font-size: 12px;
+            margin: 4px 0;
+        }
+
+        div.message {
+            background: #e9e9eb;
+            border-radius: 12px;
+            box-sizing: border-box;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 10px;
+            padding: 6px 10px;
+            width: 80%;
+            word-break: break-word;
+
+            &.selected {
+                background: green;
+            }
+
+            &.from-me {
+                align-self: end;
+                background: #2292fe;
+                color: white;
+
+                &.selected {
+                    background: green;
+                }
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        .hidden-year, .hidden-month {
+            display: none !important;
+        }
     }
 }

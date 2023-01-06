@@ -13,7 +13,7 @@
     "start": "node support/scripts/start.js"
   },
   "dependencies": {
-    "bootstrap": "^5.2.2",
+    "bootstrap": "5.2.3",
     "bootstrap-icons": "^1.10.2",
     "eventemitter3": "4.0.7",
     "sqlite3": "5.1.2"
@@ -22,13 +22,13 @@
     "beeper": "1.1.1",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
-    "electron": "21.3.0",
-    "electron-builder": "23.6.0",
-    "eslint": "8.26.0",
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
+    "eslint": "^8.26.0",
     "lodash": "^4.17.21",
     "minimatch": "^5.1.0",
-    "preprocess": "3.2.0",
-    "sass": "1.56.0",
+    "preprocess": "^3.2.0",
+    "sass": "^1.56.0",
     "tiny-lr": "2.0.0"
   },
   "startConfig": {

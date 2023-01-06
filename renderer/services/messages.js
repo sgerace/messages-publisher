@@ -63,14 +63,33 @@ class Messages {
     }
 
     async getMessagesByChat(chatId) {
-        const rows = await this.#all('SELECT m.handle_id, m.text, m.date, maj.attachment_id ' +
+        const rows = await this.#all('SELECT m.ROWID AS id, m.handle_id, m.text, ' +
+            "datetime(m.date/1000000000 + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch', 'localtime') as date," +
+            'maj.attachment_id, m.is_from_me ' +
             'FROM chat_message_join cmj ' +
             'JOIN message m ON m.ROWID = cmj.message_id ' +
             'LEFT JOIN message_attachment_join maj ON maj.message_id = cmj.message_id ' +
             'WHERE cmj.chat_id = ?;', [chatId]);
+        rows.forEach(x => x.date = new Date(x.date));
         rows.sort((a, b) => a.date - b.date);
         return rows;
     }
+
+    // SELECT 
+    //   datetime(message.date/1000000000 + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch', 'localtime') as date,
+    //   mdb.Files.fileID,
+    //   message.is_from_me,
+    //   message.handle_id,
+    //   attachment.filename,
+    //   attachment.mime_type,
+    //   replace(replace(message.text, X'0D', ''), X'0A', '\n') as text
+    // FROM chat_message_join
+    // JOIN message ON message.rowid=chat_message_join.message_id
+    // LEFT JOIN message_attachment_join ON message_attachment_join.message_id = message.rowid
+    // LEFT JOIN attachment ON message_attachment_join.attachment_id = attachment.rowid
+    // LEFT JOIN mdb.Files ON substr(attachment.filename, 3) = mdb.Files.relativePath
+    // WHERE chat_message_join.chat_id=11
+    // ORDER BY message.date ASC;
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -147,13 +147,15 @@ class ChatsSidebar extends EventEmitter {
         this.#listContainer = document.createElement('div');
         this.#listContainer.className = 'list-container';
         this.#listContainer.addEventListener('click', (ev) => {
-            const chat = this.#chats.get(Number(ev.target.dataset.id));
+            const chatNode = ev.target.closest('.list-group-item');
+            if (!chatNode) { return; }
+            const chat = this.#chats.get(Number(chatNode.dataset.id));
             if (!this.#selectedChat || this.#selectedChat.id !== chat.id) {
                 const active = this.#listGroup.querySelector('.active');
                 if (active) {
                     active.classList.remove('active');
                 }
-                ev.target.classList.add('active');
+                chatNode.classList.add('active');
                 this.emit('activeChange', chat);
             }
         });
