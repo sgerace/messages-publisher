@@ -5,5 +5,19 @@
 div#mp-chat-panel {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
+    width: 50%;
+    max-width: 50%;
+
+    nav.navbar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        span.navbar-brand {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
 }

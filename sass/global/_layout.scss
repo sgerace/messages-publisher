@@ -21,3 +21,11 @@ div#main {
     padding: 0;
     width: 100vw;
 }
+
+div#mp-content-layout {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    height: 100vh;
+    overflow: hidden;
+}

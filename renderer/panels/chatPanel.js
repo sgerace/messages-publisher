@@ -67,31 +67,19 @@ class ChatPanel {
         this.node = document.getElementById('mp-chat-panel');
 
         // Initialize header
-        const header = document.createElement('nav');
-        header.className = 'navbar navbar-dark bg-dark';
-        this.#headerSpan = document.createElement('span');
-        this.#headerSpan.className = 'navbar-brand';
-        this.#headerSpan.textContent = 'Messages';
+        this.#headerSpan = document.getElementById('chat-panel-name');
 
         // Initialize rename button
-        const renameButton = document.createElement('button');
-        renameButton.className = 'btn btn-secondary';
-        renameButton.addEventListener('click', () => {
+        document.getElementById('chat-panel-rename-btn').addEventListener('click', () => {
             const resolved = this.#services.datastore.resolveChatName(this.#chat);
             this.#modals.renameChat.open(this.#chat, resolved.hasName ? resolved.value : '');
         });
-        const renameIcon = document.createElement('i');
-        renameIcon.className = 'bi bi-pencil-square';
-        renameButton.append(renameIcon);
-
-        // Append header items
-        header.append(this.#headerSpan, renameButton);
 
         // Initialize message viewer
         this.#messageViewer = new MessageViewer();
 
         // Append components to node
-        this.node.append(header, this.#messageViewer.node);
+        this.node.append(this.#messageViewer.node);
     }
 
     #initializeEvents() {
