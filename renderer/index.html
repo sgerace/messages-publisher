@@ -71,6 +71,20 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Books Sidebar -->
+            <div id="mp-books-sidebar" class="hidden">
+                <nav class="navbar navbar-dark bg-dark">
+                    <span class="navbar-brand">Books</span>
+                    <button id="mp-books-sidebar-create-button" class="btn btn-secondary">Create</button>
+                </nav>
+                <div class="sidebar-filter-container">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">Filter Books:</label>
+                        <input class="form-control" type="text" id="mp-books-sidebar-filter-input">
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -82,15 +96,32 @@
             <div id="mp-chat-panel">
                 <nav class="navbar navbar-dark bg-dark">
                     <span id="chat-panel-name" class="navbar-brand">Messages</span>
-                    <button id="chat-panel-rename-btn", class="btn btn-secondary">
+                    <button id="chat-panel-rename-btn" class="btn btn-secondary">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                 </nav>
+                <div class="mp-message-viewer"></div>
+                <div class="mp-message-footer rt"></div>
             </div>
 
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <!-- Book Panel -->
-            <div id="mp-book-panel"></div>
+            <div id="mp-book-panel">
+                <nav class="navbar navbar-dark bg-dark">
+                    <span id="book-panel-name" class="navbar-brand">Book</span>
+                    <button id="book-panel-edit-btn" class="btn btn-secondary">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button id="book-panel-delete-btn" class="btn btn-secondary">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <button id="book-panel-export-btn" class="btn btn-secondary">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </nav>
+                <div class="mp-message-viewer"></div>
+                <div class="mp-message-footer"></div>
+            </div>
         </div>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -132,6 +163,50 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="rename-person-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Upsert Book Modal -->
+        <div class="modal fade" id="upsert-book-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="upsert-book-title">Create Book</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="upsert-book-name" placeholder="book name">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="upsert-book-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Delete Book Modal -->
+        <div class="modal fade" id="delete-book-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="delete-book-title">Delete Book</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="delete-book-name" placeholder="book name">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id="delete-book-submit">Delete</button>
                     </div>
                 </div>
             </div>

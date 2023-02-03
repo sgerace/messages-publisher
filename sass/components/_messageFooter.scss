@@ -1,0 +1,21 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Message Footer Component Styles
+ */
+
+.mp-message-footer {
+    display: flex;
+    flex-direction: row;
+    height: 35px;
+    max-height: 35px;
+    min-height: 35px;
+
+    span {
+        &.action {
+            cursor: pointer;
+        }
+
+        &.message {
+            
+        }
+    }
+}

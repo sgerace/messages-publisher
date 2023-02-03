@@ -2,11 +2,10 @@
  * Datastore Service
  */
 
+const electron = require('electron');
 const EventEmitter = require('eventemitter3');
 const fspath = require('path');
 const sqlite = require('sqlite3');
-
-const electron = require('electron');
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -16,6 +15,7 @@ class Datastore extends EventEmitter {
 
     #db = null;
 
+    #books = [];
     #chatNames = new Map();
     #handleNames = new Map();
 
@@ -29,7 +29,48 @@ class Datastore extends EventEmitter {
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Public properties
+
+    get books() { return this.#books; }
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public methods
+
+    async addMessagesToBook(bookId, messages) {
+        const items = new Array();
+        for (const messageId of messages) {
+            items.push([bookId, messageId]);
+        }
+        const v = items.map(x => `(${x.join(',')})`).join(',');
+        // @TODO: Figure out proper escape syntax for query (to avoid SQL injection)
+        await this.#run(`INSERT OR REPLACE INTO book_messages (book_id, message_id) VALUES ${v};`);
+        this.emit('bookMessagesAdd', bookId, messages);
+    }
+
+    async createBook(name) {
+        const id = await this.#run('INSERT INTO books (name) VALUES ($name);', {
+            $name: name
+        });
+        this.#books.push({ id, name });
+        this.#books.sort((a, b) => a.name.localeCompare(b.name));
+        this.emit('booksChange');
+    }
+
+    async deleteBook(id) {
+        await this.#run('DELETE FROM books WHERE id = $id;', {
+            $id: id
+        });
+        const index = this.#books.findIndex(x => x.id === id);
+        this.#books.splice(index, 1);
+        this.emit('booksChange');
+    }
+
+    async getMessagesByBook(bookId) {
+        return (await this.#all('SELECT message_id FROM book_messages WHERE book_id = $id;', {
+            $id: bookId
+        })).map(x => x.message_id);
+    }
 
     async open() {
 
@@ -49,8 +90,22 @@ class Datastore extends EventEmitter {
         await this.#createTables();
 
         // Initialize data
+        await this.#initializeBooks();
         await this.#initializeChatNames();
         await this.#initializeHandleNames();
+    }
+
+    async removeMessagesFromBook(bookId, messages) {
+        const ids = new Array();
+        for (const messageId of messages) {
+            ids.push(messageId);
+        }
+
+        // @TODO: Improve the efficiency of this query, this is pretty horrible
+        await this.#run(`DELETE FROM book_messages WHERE book_id = $bookId AND message_id IN (${ids.join(',')});`, {
+            $bookId: bookId
+        });
+        this.emit('bookMessagesRemove', bookId, messages);
     }
 
     resolveChatName(chat) {
@@ -66,9 +121,21 @@ class Datastore extends EventEmitter {
     resolveHandleName(id) {
         const name = this.#handleNames.get(id);
         return {
+            id: id,
             hasName: !!name,
             value: name ? name : id
         };
+    }
+
+    async setBookInfo(id, info) {
+        await this.#run('UPDATE books SET name = $name WHERE id = $id;', {
+            $id: id,
+            $name: info.name
+        });
+        const book = this.#books.find(x => x.id === id);
+        book.name = info.name;
+        this.emit('booksChange');
+        this.emit('bookChange', book);
     }
 
     async setChatName(id, name) {
@@ -118,6 +185,34 @@ class Datastore extends EventEmitter {
             '  name TEXT NOT NULL',
             ');'
         ].join(''));
+
+        // Ensure books table exists
+        await this.#run([
+            'CREATE TABLE IF NOT EXISTS books (',
+            '  id INTEGER PRIMARY KEY AUTOINCREMENT,',
+            '  name TEXT NOT NULL',
+            ');'
+        ].join(''));
+
+        // Ensure book messages table exists
+        await this.#run([
+            'CREATE TABLE IF NOT EXISTS book_messages (',
+            '  book_id INTEGER,',
+            '  message_id INTEGER,',
+            '  PRIMARY KEY (book_id, message_id),',
+            '  CONSTRAINT book_messages_book_id_FK',
+            '    FOREIGN KEY (book_id)',
+            '    REFERENCES books (id)',
+            '    ON DELETE CASCADE',
+            '    ON UPDATE NO ACTION',
+            ');'
+        ].join(''));
+    }
+
+    async #initializeBooks() {
+        this.#books = await this.#all('SELECT * FROM books;');
+        this.#books.sort((a, b) => a.name.localeCompare(b.name));
+        this.emit('booksChange');
     }
 
     async #initializeChatNames() {
@@ -132,8 +227,8 @@ class Datastore extends EventEmitter {
 
     async #run(sql, params) {
         return new Promise((resolve, reject) => {
-            this.#db.run(sql, params, (err, result) => {
-                if (err) { reject(err); } else { resolve(result); }
+            this.#db.run(sql, params, function(err) {
+                if (err) { reject(err); } else { resolve(this.lastID); }
             });
         });
     }

@@ -2,6 +2,7 @@
  * Chat Panel
  */
 
+const MessageFooter = require('../components/messageFooter');
 const MessageViewer = require('../components/messageViewer');
 
 
@@ -15,6 +16,7 @@ class ChatPanel {
     #modals = null;
 
     // Private data
+    #book = null;
     #chat = null;
     #chatName = null;
 
@@ -22,6 +24,7 @@ class ChatPanel {
     #headerSpan = null;
 
     // Private components
+    #messageFooter = null;
     #messageViewer = null;
 
     // Public variables
@@ -57,11 +60,21 @@ class ChatPanel {
 
         const messages = await this.#services.messages.getMessagesByChat(this.#chat.id);
         this.#messageViewer.setMessages(messages);
+        this.#updateFooter();
+    }
+
+    setBook(book) {
+        this.#book = book;
+        this.#updateFooter();
     }
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Private methods
+
+    #addSelectionToBook() {
+        this.#services.datastore.addMessagesToBook(this.#book.id, this.#messageViewer.selection);
+    }
 
     #initialize() {
         this.node = document.getElementById('mp-chat-panel');
@@ -75,11 +88,11 @@ class ChatPanel {
             this.#modals.renameChat.open(this.#chat, resolved.hasName ? resolved.value : '');
         });
 
-        // Initialize message viewer
-        this.#messageViewer = new MessageViewer();
-
-        // Append components to node
-        this.node.append(this.#messageViewer.node);
+        // Initialize message viewer and footer
+        this.#messageViewer = new MessageViewer(this.node.querySelector('.mp-message-viewer'));
+        this.#messageViewer.on('selectionChange', (selection) => this.#updateFooter(selection));
+        this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
+        this.#messageFooter.on('action', () => this.#addSelectionToBook());
     }
 
     #initializeEvents() {
@@ -89,6 +102,19 @@ class ChatPanel {
     #updateChatName() {
         this.#chatName = this.#services.datastore.resolveChatName(this.#chat).value;
         this.#headerSpan.textContent = this.#chatName;
+    }
+
+    #updateFooter() {
+        const selection = this.#messageViewer.selection;
+        if (selection.size === 0) {
+            this.#messageFooter.setMessage('Select one or more messages to add to book');
+        } else if (!this.#book) {
+            this.#messageFooter.setMessage('Open a book to add messages');
+        } else if (selection.size === 1) {
+            this.#messageFooter.setAction(`Add ${selection.size} message to book ->`);
+        } else { // if (selection.size > 1) {
+            this.#messageFooter.setAction(`Add ${selection.size} messages to book ->`);
+        }
     }
 }
 

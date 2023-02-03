@@ -2,7 +2,9 @@
  * Message Viewer Component
  */
 
-class MessageViewer {
+const EventEmitter = require('eventemitter3');
+
+class MessageViewer extends EventEmitter {
 
     node = null;
 
@@ -18,14 +20,18 @@ class MessageViewer {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructor
 
-    constructor() {
-        this.#initialize();
+    constructor(node) {
+        super();
+        this.#initialize(node);
     }
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public properties
 
+    get messages() { return this.#messages; }
+
+    get selection() { return this.#selection; }
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,6 +39,7 @@ class MessageViewer {
 
     setMessages(messages) {
         this.#messages = messages;
+        this.#selection.clear();
 
         // Create container
         const container = document.createElement('div');
@@ -118,8 +125,8 @@ class MessageViewer {
         return node;
     }
 
-    #initialize() {
-        this.node = document.createElement('div');
+    #initialize(node) {
+        this.node = node;
         this.node.className = 'mp-message-viewer';
         this.node.addEventListener('click', (ev) => this.#onClick(ev));
 
@@ -152,9 +159,15 @@ class MessageViewer {
     }
 
     #updateSelection(ev, message) {
-        // const index = message.dataset.index;
-        // @TODO [GH-3] Keep track of selected items in a way that is usable when adding to a book
+        const id = Number(message.dataset.id);
+        if (this.#selection.has(id)) {
+            this.#selection.delete(id);
+        } else {
+            this.#selection.add(id);
+        }
+        console.log(this.#messages[message.dataset.index]);
         message.classList.toggle('selected');
+        this.emit('selectionChange', this.#selection);
     }
 }
 

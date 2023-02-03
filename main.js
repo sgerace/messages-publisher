@@ -18,6 +18,8 @@ let mainWindow;
 // const menu = require('./main/menu');
 const BrowserWindowStateManager = require('./main/stateManager'); // Module to manage window state
 
+const publisher = require('./main/publisher');
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration
@@ -109,9 +111,12 @@ app.on('activate', function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Handles
 
-ipc.handle('getUserDataPath', () => {
-    return app.getPath('userData');
+ipc.handle('exportBook', async (window, book) => {
+    await new Promise((resolve) => setTimeout(() => resolve(), 2000));
+    await publisher.go(book);
 });
+
+ipc.handle('getUserDataPath', () => app.getPath('userData'));
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
