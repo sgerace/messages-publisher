@@ -131,17 +131,6 @@ class BooksSidebar extends EventEmitter {
             const bookNode = ev.target.closest('.list-group-item');
             if (!bookNode) { return; }
             this.setActive(bookNode.dataset.id);
-
-            // const book = this.#services.datastore.books[Number(bookNode.dataset.index)];
-            // if (!this.#selectedBook || this.#selectedBook.id !== book.id) {
-            //     const active = this.#listGroup.querySelector('.active');
-            //     if (active) {
-            //         active.classList.remove('active');
-            //     }
-            //     bookNode.classList.add('active');
-            //     this.#selectedBook = book;
-            //     this.emit('activeChange', this.#selectedBook);
-            // }
         });
         this.#listGroup = document.createElement('ul');
         this.#listGroup.className = 'list-group list-group-flush';
