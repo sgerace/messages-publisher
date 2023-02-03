@@ -11,6 +11,7 @@
 @import "./global/layout";
 
 // Component styles
+@import "./components/messageFooter";
 @import "./components/messageViewer";
 
 // Panel styles
@@ -18,5 +19,6 @@
 @import "./panels/chatPanel";
 @import "./panels/navbarPanel";
 @import "./panels/sidebarPanel";
+@import "./panels/sidebars/booksSidebar";
 @import "./panels/sidebars/chatsSidebar";
 @import "./panels/sidebars/peopleSidebar";

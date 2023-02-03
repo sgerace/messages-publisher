@@ -2,6 +2,7 @@
  * Sidebar Panel
  */
 
+const BooksSidebar = new require('./sidebars/booksSidebar');
 const ChatsSidebar = new require('./sidebars/chatsSidebar');
 const PeopleSidebar = new require('./sidebars/peopleSidebar');
 
@@ -34,10 +35,8 @@ class SidebarPanel {
     // Public methods
 
     async refresh() {
-        const chats = await this.#services.messages.getChats();
-        const handles = await this.#services.messages.getHandles();
-        this.sidebars.chats.setChats(chats);
-        this.sidebars.people.setHandles(handles);
+        this.sidebars.chats.setChats(await this.#services.messages.getChats());
+        this.sidebars.people.setHandles(await this.#services.messages.getHandles());
     }
 
     setActive(name) {
@@ -62,6 +61,7 @@ class SidebarPanel {
 
         // Initialize sidebars
         this.sidebars = {
+            books: new BooksSidebar(this.#services, this.#modals),
             chats: new ChatsSidebar(this.#services, this.#modals),
             people: new PeopleSidebar(this.#services, this.#modals)
         };

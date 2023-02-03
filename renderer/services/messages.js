@@ -63,13 +63,27 @@ class Messages {
     }
 
     async getMessagesByChat(chatId) {
-        const rows = await this.#all('SELECT m.ROWID AS id, m.handle_id, m.text, ' +
+        const rows = await this.#all('SELECT m.ROWID AS id, h.id AS handle_id, m.text, ' +
             "datetime(m.date/1000000000 + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch', 'localtime') as date," +
             'maj.attachment_id, m.is_from_me ' +
             'FROM chat_message_join cmj ' +
             'JOIN message m ON m.ROWID = cmj.message_id ' +
+            'JOIN handle h ON h.ROWID = m.handle_id ' +
             'LEFT JOIN message_attachment_join maj ON maj.message_id = cmj.message_id ' +
             'WHERE cmj.chat_id = ?;', [chatId]);
+        rows.forEach(x => x.date = new Date(x.date));
+        rows.sort((a, b) => a.date - b.date);
+        return rows;
+    }
+
+    async getMessagesById(ids) {
+        const rows = await this.#all('SELECT m.ROWID AS id, h.id AS handle_id, m.text, ' +
+            "datetime(m.date/1000000000 + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch', 'localtime') as date," +
+            'maj.attachment_id, m.is_from_me ' +
+            'FROM message m ' +
+            'JOIN handle h ON h.ROWID = m.handle_id ' +
+            'LEFT JOIN message_attachment_join maj ON maj.message_id = m.ROWID ' +
+            `WHERE m.ROWID IN (${ids.join(',')});`); // @TODO: Figure out proper escape syntax
         rows.forEach(x => x.date = new Date(x.date));
         rows.sort((a, b) => a.date - b.date);
         return rows;

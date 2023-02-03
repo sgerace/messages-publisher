@@ -48,6 +48,24 @@ class ChatsSidebar extends EventEmitter {
         return !this.node.classList.contains('hidden');
     }
 
+    setActive(chatId) {
+        if (typeof chatId !== 'number') {
+            chatId = Number(chatId);
+        }
+        const chat = (chatId ? this.#chats.get(Number(chatId)) : null) || null;
+        if (this.#selectedChat !== chat) {
+            const active = this.#listGroup.querySelector('.active');
+            if (active) {
+                active.classList.remove('active');
+            }
+            if (chat) {
+                this.#listGroup.querySelector(`#chat-${chat.id}`).classList.add('active');
+            }
+            this.#selectedChat = chat;
+            this.emit('activeChange', this.#selectedChat);
+        }
+    }
+
     setChats(chats) {
         this.#chats = chats;
 
@@ -61,6 +79,7 @@ class ChatsSidebar extends EventEmitter {
             li.className = 'list-group-item';
             const resolved = this.#services.datastore.resolveChatName(value);
             li.textContent = resolved.value;
+            li.id = `chat-${value.id}`;
             li.dataset.id = value.id;
             li.dataset.hasName = resolved.hasName;
             ul.append(li);
@@ -149,15 +168,7 @@ class ChatsSidebar extends EventEmitter {
         this.#listContainer.addEventListener('click', (ev) => {
             const chatNode = ev.target.closest('.list-group-item');
             if (!chatNode) { return; }
-            const chat = this.#chats.get(Number(chatNode.dataset.id));
-            if (!this.#selectedChat || this.#selectedChat.id !== chat.id) {
-                const active = this.#listGroup.querySelector('.active');
-                if (active) {
-                    active.classList.remove('active');
-                }
-                chatNode.classList.add('active');
-                this.emit('activeChange', chat);
-            }
+            this.setActive(chatNode.dataset.id);
         });
         this.#listGroup = document.createElement('ul');
         this.#listGroup.className = 'list-group list-group-flush';

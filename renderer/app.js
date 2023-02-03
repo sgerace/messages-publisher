@@ -24,8 +24,10 @@ const services = {
 // Modals
 
 const modals = {
+    deleteBook: require('./modals/deleteBookModal').create(services),
     renameChat: require('./modals/renameChatModal').create(services),
-    renamePerson: require('./modals/renamePersonModal').create(services)
+    renamePerson: require('./modals/renamePersonModal').create(services),
+    upsertBook: require('./modals/upsertBookModal').create(services)
 };
 
 
@@ -35,7 +37,7 @@ const modals = {
 const navbarPanel = require('./panels/navbarPanel').create(services);
 const sidebarPanel = require('./panels/sidebarPanel').create(services, modals);
 const chatPanel = require('./panels/chatPanel').create(services, modals);
-const bookPanel = require('./panels/bookPanel').create(services);
+const bookPanel = require('./panels/bookPanel').create(services, modals);
 
 // Manage and initialize active sidebar
 navbarPanel.on('activeChange', (active) => {
@@ -44,8 +46,24 @@ navbarPanel.on('activeChange', (active) => {
 });
 navbarPanel.setActive(localStorage.getItem('activeSidebar') || 'chats');
 
-// Connect active chat event
-sidebarPanel.sidebars.chats.on('activeChange', (chat) => chatPanel.setChat(chat));
+// Connect active channge events
+sidebarPanel.sidebars.chats.on('activeChange', (chat) => {
+    if (chat) {
+        localStorage.setItem('activeChat', chat.id);
+    } else {
+        localStorage.removeItem('activeChat');
+    }
+    chatPanel.setChat(chat);
+});
+sidebarPanel.sidebars.books.on('activeChange', (book) => {
+    if (book) {
+        localStorage.setItem('activeBook', book.id);
+    } else {
+        localStorage.removeItem('activeBook');
+    }
+    chatPanel.setBook(book);
+    bookPanel.setBook(book);
+});
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -59,7 +77,10 @@ async function initialize() {
 
     // Initialize panels
     await sidebarPanel.refresh();
-    await bookPanel.load();
+
+    // Restore state of application
+    sidebarPanel.sidebars.chats.setActive(localStorage.getItem('activeChat'));
+    sidebarPanel.sidebars.books.setActive(localStorage.getItem('activeBook'));
 }
 
 initialize();
