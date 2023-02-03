@@ -96,12 +96,15 @@
             <div id="mp-chat-panel">
                 <nav class="navbar navbar-dark bg-dark">
                     <span id="chat-panel-name" class="navbar-brand">Messages</span>
+                    <button id="chat-panel-select-date-range-btn" class="btn btn-secondary">
+                        <i class="bi bi-calendar"></i>
+                    </button>
                     <button id="chat-panel-rename-btn" class="btn btn-secondary">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                 </nav>
                 <div class="mp-message-viewer"></div>
-                <div class="mp-message-footer rt"></div>
+                <div class="mp-message-footer lt"></div>
             </div>
 
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -120,7 +123,7 @@
                     </button>
                 </nav>
                 <div class="mp-message-viewer"></div>
-                <div class="mp-message-footer"></div>
+                <div class="mp-message-footer rt"></div>
             </div>
         </div>
 
@@ -141,6 +144,28 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="rename-chat-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Date Range Modal -->
+        <div class="modal fade" id="select-date-range-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Select Date Range</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" placeholder="Date range">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="select-date-range-submit">Select</button>
                     </div>
                 </div>
             </div>

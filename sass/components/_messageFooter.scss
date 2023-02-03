@@ -3,19 +3,29 @@
  */
 
 .mp-message-footer {
+    align-items: center;
+    background-color: $charcoal-10;
+    border-top: 1px solid $charcoal-40;
     display: flex;
     flex-direction: row;
-    height: 35px;
-    max-height: 35px;
-    min-height: 35px;
+    font-size: 14px;
+    justify-content: space-between;
+    height: 32px;
+    max-height: 32px;
+    min-height: 32px;
+    padding: 0 10px;
 
     span {
+        &.clear {
+            cursor: pointer;
+        }
+
         &.action {
             cursor: pointer;
         }
 
         &.message {
-            
+            color: $charcoal-70;
         }
     }
 }

@@ -27,6 +27,7 @@ const modals = {
     deleteBook: require('./modals/deleteBookModal').create(services),
     renameChat: require('./modals/renameChatModal').create(services),
     renamePerson: require('./modals/renamePersonModal').create(services),
+    selectDateRange: require('./modals/selectDateRangeModal').create(services),
     upsertBook: require('./modals/upsertBookModal').create(services)
 };
 

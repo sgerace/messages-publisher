@@ -125,6 +125,7 @@ class BookPanel {
         this.#messageViewer.on('selectionChange', (selection) => this.#updateFooter(selection));
         this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
         this.#messageFooter.on('action', () => this.#removeSelectionFromBook());
+        this.#messageFooter.on('clear', () => this.#messageViewer.clearSelection());
 
         // Set book
         this.setBook(null);
