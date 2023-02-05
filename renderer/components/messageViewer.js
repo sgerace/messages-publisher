@@ -29,13 +29,53 @@ class MessageViewer extends EventEmitter {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public properties
 
+    get endDate() { return this.#messages[this.#messages.length - 1].date; }
+
     get messages() { return this.#messages; }
 
     get selection() { return this.#selection; }
 
+    get startDate() { return this.#messages[0].date; }
+
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public methods
+
+    clearSelection() {
+        this.#selection.clear();
+        let iter = this.#messageContainer.firstChild;
+        let change = false;
+        while (iter) {
+            if (iter.dataset.type === 'message' && iter.classList.contains('selected')) {
+                iter.classList.remove('selected');
+                change = true;
+            }
+            iter = iter.nextSibling;
+        }
+        if (change) {
+            this.emit('selectionChange', this.#selection);
+        }
+    }
+
+    selectDateRange(start, end) {
+        let iter = this.#messageContainer.firstChild;
+        let change = false;
+        while (iter) {
+            if (iter.dataset.type === 'message') {
+                const message = this.#messages[Number(iter.dataset.index)];
+                const id = Number(iter.dataset.id);
+                if (start <= message.date && message.date < end && !this.#selection.has(id)) {
+                    this.#selection.add(id);
+                    iter.classList.toggle('selected');
+                    change = true;
+                }
+            }
+            iter = iter.nextSibling;
+        }
+        if (change) {
+            this.emit('selectionChange', this.#selection);
+        }
+    }
 
     setMessages(messages) {
         this.#messages = messages;
@@ -165,7 +205,6 @@ class MessageViewer extends EventEmitter {
         } else {
             this.#selection.add(id);
         }
-        console.log(this.#messages[message.dataset.index]);
         message.classList.toggle('selected');
         this.emit('selectionChange', this.#selection);
     }

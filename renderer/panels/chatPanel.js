@@ -22,6 +22,8 @@ class ChatPanel {
 
     // Private elements
     #headerSpan = null;
+    #editButton = null;
+    #dateRangeButton = null;
 
     // Private components
     #messageFooter = null;
@@ -82,8 +84,24 @@ class ChatPanel {
         // Initialize header
         this.#headerSpan = document.getElementById('chat-panel-name');
 
+        // Initialize date range button
+        this.#dateRangeButton = document.getElementById('chat-panel-select-date-range-btn');
+        this.#dateRangeButton.addEventListener('click', async () => {
+            const range = await this.#modals.selectDateRange.open({
+                min: this.#messageViewer.startDate,
+                max: this.#messageViewer.endDate
+            });
+            if (range) {
+                const r1 = range[1];
+                const end = new Date(r1.getFullYear(), r1.getMonth(), r1.getDate());
+                end.setDate(end.getDate() + 1);
+                this.#messageViewer.selectDateRange(range[0], end);
+            }
+        });
+
         // Initialize rename button
-        document.getElementById('chat-panel-rename-btn').addEventListener('click', () => {
+        this.#editButton = document.getElementById('chat-panel-rename-btn');
+        this.#editButton.addEventListener('click', () => {
             const resolved = this.#services.datastore.resolveChatName(this.#chat);
             this.#modals.renameChat.open(this.#chat, resolved.hasName ? resolved.value : '');
         });
@@ -93,6 +111,7 @@ class ChatPanel {
         this.#messageViewer.on('selectionChange', (selection) => this.#updateFooter(selection));
         this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
         this.#messageFooter.on('action', () => this.#addSelectionToBook());
+        this.#messageFooter.on('clear', () => this.#messageViewer.clearSelection());
     }
 
     #initializeEvents() {
