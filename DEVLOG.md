@@ -37,3 +37,10 @@ that we would have to do to have smooth scrolling in the main window.  We also
 have a little buffer of rendered elements with absolute positions before and
 after the current state.  We don't use the native scroll bar at all instead
 have a sort of minimap with years and months denoted.
+
+
+## 2023-06-30
+
+Little things:
+
+- Do we need to round the corners of images?

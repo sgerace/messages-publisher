@@ -1,0 +1,23 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Panel Filter Container Styles
+ */
+
+.mp-panel-filter-container {
+    border-bottom: 1px solid $charcoal-20;
+    // box-shadow: inset -7px 0 9px -7px #aaa;
+    padding: 8px;
+
+    div:not(:first-child) {
+        margin-top: 6px;
+    }
+
+    div.input-group {
+        margin: 0 !important;
+    }
+
+    div.form-switch {
+        label.form-check-label {
+            font-size: 14px;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Panel Header Styles
+ */
+
+.mp-panel-header {
+    align-items: center;
+    border-bottom: 1px solid $charcoal-20;
+    // box-shadow: inset -7px 0 9px -7px #aaa;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    padding: 10px 16px;
+
+    h1 {
+        flex: 1 1 auto;
+        font-size: 20px;
+        margin: 0;
+    }
+
+    button.btn {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+}
