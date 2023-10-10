@@ -3,13 +3,10 @@
  */
 
 div#mp-sidebar-panel {
+    background: #f7f7f7;
+    box-shadow: inset -7px 0 9px -7px #aaa;
     display: flex;
     flex-direction: column;
     max-width: 400px;
     min-width: 400px;
-
-    .header {
-        background: $charcoal-70;
-        min-height: 40px;
-    }
 }

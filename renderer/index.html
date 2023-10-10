@@ -40,10 +40,10 @@
 
             <!-- Chats Sidebar -->
             <div id="mp-chats-sidebar" class="hidden">
-                <nav class="navbar navbar-dark bg-dark">
-                    <span class="navbar-brand">Chats</span>
+                <nav class="mp-panel-header">
+                    <h1>Chats</h1>
                 </nav>
-                <div class="sidebar-filter-container">
+                <div class="mp-panel-filter-container">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="mp-chats-sidebar-filter-only-named">
                         <label class="form-check-label" for="chats-filter-toggle">Only show named chats</label>
@@ -57,28 +57,28 @@
 
             <!-- People Sidebar -->
             <div id="mp-people-sidebar" class="hidden">
-                <nav class="navbar navbar-dark bg-dark">
-                    <span class="navbar-brand">People</span>
+                <nav class="mp-panel-header">
+                    <h1>People</h1>
                 </nav>
-                <div class="sidebar-filter-container">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="mp-people-sidebar-filter-only-named">
-                        <label class="form-check-label" for="people-filter-toggle">Only show named people</label>
-                    </div>
+                <div class="mp-panel-filter-container">
                     <div class="input-group mb-3">
                         <label class="input-group-text">Filter People:</label>
                         <input class="form-control" type="text" id="mp-people-sidebar-filter-input">
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="mp-people-sidebar-filter-only-named">
+                        <label class="form-check-label" for="mp-people-sidebar-filter-only-named">Only show named people</label>
                     </div>
                 </div>
             </div>
 
             <!-- Books Sidebar -->
             <div id="mp-books-sidebar" class="hidden">
-                <nav class="navbar navbar-dark bg-dark">
-                    <span class="navbar-brand">Books</span>
-                    <button id="mp-books-sidebar-create-button" class="btn btn-secondary">Create</button>
+                <nav class="mp-panel-header">
+                    <h1>Books</h1>
+                    <button id="mp-books-sidebar-create-button" class="btn btn-secondary">Create Book</button>
                 </nav>
-                <div class="sidebar-filter-container">
+                <div class="mp-panel-filter-container">
                     <div class="input-group mb-3">
                         <label class="input-group-text">Filter Books:</label>
                         <input class="form-control" type="text" id="mp-books-sidebar-filter-input">
@@ -128,13 +128,52 @@
         </div>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Delete Book Modal -->
+        <div class="modal fade" id="delete-book-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="delete-book-title">Delete Book</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="delete-book-name" placeholder="book name">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="delete-book-submit">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Export Book Modal -->
+        <div class="modal fade" id="export-book-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="export-book-modal">Exporting Book...</h1>
+                    </div>
+                    <form class="modal-body">
+                        <div class="progress" role="progressbar" style="height: 20px">
+                            <div class="progress-bar" id="export-book-progress" style="width: 25%"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Rename Chat Modal -->
         <div class="modal fade" id="rename-chat-modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="rename-chat-title">Rename Chat</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
                     </div>
                     <form class="modal-body">
                         <div class="mb-3">
@@ -142,30 +181,8 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="rename-chat-submit">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <!-- Date Range Modal -->
-        <div class="modal fade" id="select-date-range-modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5">Select Date Range</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form class="modal-body">
-                        <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Date range">
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="select-date-range-submit">Select</button>
                     </div>
                 </div>
             </div>
@@ -178,7 +195,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="rename-person-title">Rename Person</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
                     </div>
                     <form class="modal-body">
                         <div class="mb-3">
@@ -186,8 +203,30 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="rename-person-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Select Date Range Modal -->
+        <div class="modal fade" id="select-date-range-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Select Date Range</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+                    </div>
+                    <form class="modal-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" placeholder="Date range">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="select-date-range-submit">Select</button>
                     </div>
                 </div>
             </div>
@@ -200,7 +239,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="upsert-book-title">Create Book</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
                     </div>
                     <form class="modal-body">
                         <div class="mb-3">
@@ -208,30 +247,8 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="upsert-book-submit">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <!-- Delete Book Modal -->
-        <div class="modal fade" id="delete-book-modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="delete-book-title">Delete Book</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form class="modal-body">
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="delete-book-name" placeholder="book name">
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" id="delete-book-submit">Delete</button>
                     </div>
                 </div>
             </div>

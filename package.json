@@ -18,18 +18,20 @@
     "eventemitter3": "4.0.7",
     "express": "4.18.2",
     "flatpickr": "4.6.13",
+    "lodash": "4.17.21",
     "pdfkit": "0.13.0",
-    "sqlite3": "5.1.2"
+    "sharp": "^0.32.0",
+    "sqlite3": "5.1.6"
   },
   "devDependencies": {
     "beeper": "1.1.1",
     "chalk": "4.1.2",
     "chokidar": "3.5.3",
-    "electron": "^22.0.0",
+    "electron": "^24.0.0",
     "electron-builder": "^23.6.0",
     "eslint": "^8.26.0",
     "lodash": "^4.17.21",
-    "minimatch": "^5.1.0",
+    "minimatch": "^8.0.0",
     "preprocess": "^3.2.0",
     "sass": "^1.56.0",
     "tiny-lr": "2.0.0"
@@ -68,18 +70,24 @@
       "prefer-const": 2,
       "semi": 2
     },
-    "overrides": [{
-      "files": [
-        "tasks/**/*.js"
-      ],
-      "env": {
-        "node": true
+    "overrides": [
+      {
+        "files": [
+          "tasks/**/*.js"
+        ],
+        "env": {
+          "node": true
+        }
       }
-    }]
+    ]
   },
   "build": {
     "productName": "Messages Publisher",
     "appId": "org.sa6.messages-publisher",
+    "asar": true,
+    "asarUnpack": [
+      "**/node_modules/sharp/**/*"
+    ],
     "mac": {
       "category": "public.app-category.productivity",
       "target": [

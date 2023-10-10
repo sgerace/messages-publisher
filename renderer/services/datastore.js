@@ -119,7 +119,10 @@ class Datastore extends EventEmitter {
     }
 
     resolveHandleName(id) {
-        const name = this.#handleNames.get(id);
+        if (id === null) {
+            return { id: null, value: 'Me' }; // @TODO: Eventually set this in the database
+        }
+        const name = id ? this.#handleNames.get(id) : undefined;
         return {
             id: id,
             hasName: !!name,

@@ -85,25 +85,37 @@ class BookPanel {
     }
 
     async #exportBook() {
-        console.log("start");
 
+        // Resolve book details
         const messages = this.#messageViewer.messages;
         const people = [];
+        const peopleLookup = new Set();
         for (let i = 0; i < messages.length; ++i) {
             const m = messages[i];
             const resolved = this.#services.datastore.resolveHandleName(m.handle_id);
-            console.log(resolved);
+            if (!peopleLookup.has(resolved.id)) {
+                peopleLookup.add(resolved.id);
+                people.push({
+                    id: resolved.id,
+                    name: resolved.value
+                });
+            }
         }
-
         const book = {
             name: this.#book.name,
             messages: messages.map(x => x.id),
             people: people
         };
 
+        // Determine path
+        const path = await electron.ipcRenderer.invoke('showSaveDialog', {
+            filename: book.name
+        });
 
-        await electron.ipcRenderer.invoke('exportBook', book);
-        console.log("finish");
+        // Export book
+        if (path) {
+            await this.#modals.exportBook.open(book, path);
+        }
     }
 
     #initialize() {

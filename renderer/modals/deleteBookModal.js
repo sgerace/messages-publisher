@@ -65,8 +65,10 @@ class DeleteBookModal {
     }
 
     async #submit() {
-        await this.#services.datastore.deleteBook(this.#book.id);
-        this.#modal.hide();
+        if (this.#nameInput.value === this.#book.name) {
+            await this.#services.datastore.deleteBook(this.#book.id);
+            this.#modal.hide();
+        }
     }
 }
 

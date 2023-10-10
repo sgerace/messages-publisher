@@ -111,12 +111,26 @@ app.on('activate', function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Handles
 
-ipc.handle('exportBook', async (window, book) => {
-    await new Promise((resolve) => setTimeout(() => resolve(), 2000));
-    await publisher.go(book);
+ipc.handle('exportBook', async (window, book, path) => {
+    await publisher.run(window, book, './data/chat.db', path);
+});
+
+ipc.handle('showSaveDialog', async (window, options) => {
+    const { canceled, filePath } = await electron.dialog.showSaveDialog({
+        defaultPath: options.filename,
+        filters: [{
+            name: 'PDF',
+            extensions: ['pdf']
+        }]
+    });
+    if (!canceled) {
+        return filePath;
+    }
 });
 
 ipc.handle('getUserDataPath', () => app.getPath('userData'));
+
+ipc.handle('getUserHomePath', () => app.getPath('home'));
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
