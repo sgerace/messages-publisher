@@ -79,6 +79,9 @@ class MessageViewer extends EventEmitter {
 
     setMessages(messages) {
         this.#messages = messages;
+
+        // Clear selection (remembering if items were selected)
+        const selectionChange = this.#selection.size;
         this.#selection.clear();
 
         // Create container
@@ -96,7 +99,7 @@ class MessageViewer extends EventEmitter {
 
             if (messageDate.getFullYear() !== currentYear) {
                 const yearDiv = document.createElement('div');
-                yearDiv.className = 'year';
+                yearDiv.className = 'date-sep year expanded';
                 yearDiv.dataset.type = 'year';
                 yearDiv.append(this.#createIcon('chevron-down'));
                 yearDiv.append(this.#createSpan(messageDate.getFullYear()));
@@ -107,10 +110,11 @@ class MessageViewer extends EventEmitter {
 
             if (messageDate.getMonth() !== currentMonth) {
                 const monthDiv = document.createElement('div');
-                monthDiv.className = 'month';
+                monthDiv.className = 'date-sep month expanded';
                 monthDiv.dataset.type = 'month';
                 monthDiv.append(this.#createIcon('chevron-down'));
-                monthDiv.append(this.#createSpan(this.#monthFormatter.format(messageDate)));
+                const monthStr = this.#monthFormatter.format(messageDate);
+                monthDiv.append(this.#createSpan(`${monthStr} ${messageDate.getFullYear()}`));
                 currentMonth = messageDate.getMonth();
                 container.append(monthDiv);
             }
@@ -147,6 +151,11 @@ class MessageViewer extends EventEmitter {
         this.#messageNodes = nodes;
         this.#messageContainer.replaceWith(container);
         this.#messageContainer = container;
+
+        // Emit change event
+        if (selectionChange) {
+            this.emit('selectionChange', this.#selection);
+        }
     }
 
 
@@ -190,9 +199,19 @@ class MessageViewer extends EventEmitter {
     }
 
     #toggleItems(ev, node, type) {
-        const className = `hidden-${type}`;
+
+        // Update expanded state
+        node.classList.toggle('expanded');
+
+        // Update chevron
+        const icon = node.querySelector('i.bi');
+        icon.classList.toggle('bi-chevron-down');
+        icon.classList.toggle('bi-chevron-right');
+
+        // Hide all child items
         let iter = node.nextSibling;
-        while (iter && iter.dataset.type !== type) {
+        const className = `hidden-${type}`;
+        while (iter && iter.dataset.type !== 'year' && iter.dataset.type !== type) {
             iter.classList.toggle(className);
             iter = iter.nextSibling;
         }

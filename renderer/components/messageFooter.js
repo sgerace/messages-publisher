@@ -7,8 +7,10 @@ const EventEmitter = require('eventemitter3');
 class MessageFooter extends EventEmitter {
 
     // Private elements
-    #clearSpan = null;
-    #actionSpan = null;
+    #message = null;
+    #clearButton = null;
+    #actionButton = null;
+    #actionButtonSpan = null;
 
     // Public variables
     node = null;
@@ -26,15 +28,17 @@ class MessageFooter extends EventEmitter {
     // Public methods
 
     setAction(text) {
-        this.#clearSpan.classList.remove('hidden');
-        this.#actionSpan.className = 'action';
-        this.#actionSpan.textContent = text;
+        this.#message.classList.add('hidden');
+        this.#clearButton.classList.remove('hidden');
+        this.#actionButton.classList.remove('hidden');
+        this.#actionButtonSpan.textContent = text;
     }
 
     setMessage(text) {
-        this.#clearSpan.classList.add('hidden');
-        this.#actionSpan.className = 'message';
-        this.#actionSpan.textContent = text;
+        this.#clearButton.classList.add('hidden');
+        this.#actionButton.classList.add('hidden');
+        this.#message.classList.remove('hidden');
+        this.#message.textContent = text;
     }
 
 
@@ -45,28 +49,31 @@ class MessageFooter extends EventEmitter {
         this.node = node;
         this.node.classList.add('mp-message-footer');
 
-        // Initialize clear span
-        this.#clearSpan = document.createElement('span');
-        this.#clearSpan.className = 'clear';
-        this.#clearSpan.textContent = 'Clear selection';
-        this.#clearSpan.addEventListener('click', () => {
-            this.emit('clear');
-        });
+        // Initialize message
+        this.#message = document.createElement('span');
+        this.#message.className = 'message';
 
-        // Initialize action span
-        this.#actionSpan = document.createElement('span');
-        this.#actionSpan.textContent = '';
-        this.#actionSpan.addEventListener('click', () => {
-            if (this.#actionSpan.classList.contains('action')) {
-                this.emit('action');
-            }
-        });
+        // Initialize clear button
+        this.#clearButton = document.createElement('button');
+        this.#clearButton.className = 'clear';
+        this.#clearButton.textContent = 'Clear selection';
+        this.#clearButton.addEventListener('click', () => this.emit('clear'));
+
+        // Initialize action button
+        this.#actionButton = document.createElement('button');
+        this.#actionButtonSpan = document.createElement('span');
+        const actionButtonIcon = document.createElement('i');
+        this.#actionButton.addEventListener('click', () => this.emit('action'));
 
         // Append spans in proper order (based on alignment flag)
         if (this.node.classList.contains('lt')) {
-            this.node.append(this.#clearSpan, this.#actionSpan);
+            actionButtonIcon.className = 'bi bi-chevron-double-right';
+            this.#actionButton.append(this.#actionButtonSpan, actionButtonIcon);
+            this.node.append(this.#message, this.#clearButton, this.#actionButton);
         } else {
-            this.node.append(this.#actionSpan, this.#clearSpan);
+            actionButtonIcon.className = 'bi bi-chevron-double-left';
+            this.#actionButton.append(actionButtonIcon, this.#actionButtonSpan);
+            this.node.append(this.#message, this.#actionButton, this.#clearButton);
         }
     }
 }

@@ -1,0 +1,65 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Panel Header Styles
+ */
+
+$mp-content-header-primary: #c0dbfb;
+$mp-content-header-secondary: #cceaeb;
+
+.mp-content-header {
+    align-items: center;
+    border-bottom: 1px solid $charcoal-20;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    padding: 10px 16px;
+    width: 100%;
+
+    &.primary {
+        background-color: $mp-content-header-primary;
+
+        span.subtitle {
+            color: $mp-blue;
+        }
+    }
+
+    &.secondary {
+        background-color: $mp-content-header-secondary;
+
+        span.subtitle {
+            color: #519092;
+        }
+    }
+
+    span.subtitle {
+        font-size: 12px;
+        font-weight: 600;
+        position: absolute;
+        top: 5px;
+    }
+
+    h2 {
+        flex: 1 1 auto;
+        font-size: 20px;
+        margin: 18px 6px 0 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    button.btn {
+        font-size: 12px;
+        padding: 4px 10px;
+
+        &.btn-ico {
+            font-size: 14px;
+            line-height: 17px;
+            padding-top: 5px;
+        }
+
+        &.mar-rt {
+            margin-right: 6px;
+        }
+    }
+}

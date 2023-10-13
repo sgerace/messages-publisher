@@ -134,7 +134,7 @@ class BookPanel {
 
         // Initialize message viewer
         this.#messageViewer = new MessageViewer(this.node.querySelector('.mp-message-viewer'));
-        this.#messageViewer.on('selectionChange', (selection) => this.#updateFooter(selection));
+        this.#messageViewer.on('selectionChange', () => this.#updateFooter());
         this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
         this.#messageFooter.on('action', () => this.#removeSelectionFromBook());
         this.#messageFooter.on('clear', () => this.#messageViewer.clearSelection());
@@ -161,9 +161,10 @@ class BookPanel {
         });
     }
 
-    #removeSelectionFromBook() {
+    async #removeSelectionFromBook() {
         const selection = this.#messageViewer.selection;
-        this.#services.datastore.removeMessagesFromBook(this.#book.id, selection);
+        await this.#services.datastore.removeMessagesFromBook(this.#book.id, selection);
+        this.#messageViewer.clearSelection();
     }
 
     #updateBookName() {
@@ -179,11 +180,11 @@ class BookPanel {
     #updateFooter() {
         const selection = this.#messageViewer.selection;
         if (selection.size === 0) {
-            this.#messageFooter.setMessage('Select one or more messages to remove from book');
+            this.#messageFooter.setMessage('Select one or more messages to remove from book...');
         } else if (selection.size === 1) {
-            this.#messageFooter.setAction(`<- Remove ${selection.size} message from book`);
+            this.#messageFooter.setAction(`Remove ${selection.size} message from book`);
         } else { // if (selection.size > 1) {
-            this.#messageFooter.setAction(`<- Remove ${selection.size} messages from book`);
+            this.#messageFooter.setAction(`Remove ${selection.size} messages from book`);
         }
     }
 }

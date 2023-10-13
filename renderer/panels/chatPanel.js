@@ -108,7 +108,7 @@ class ChatPanel {
 
         // Initialize message viewer and footer
         this.#messageViewer = new MessageViewer(this.node.querySelector('.mp-message-viewer'));
-        this.#messageViewer.on('selectionChange', (selection) => this.#updateFooter(selection));
+        this.#messageViewer.on('selectionChange', () => this.#updateFooter());
         this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
         this.#messageFooter.on('action', () => this.#addSelectionToBook());
         this.#messageFooter.on('clear', () => this.#messageViewer.clearSelection());
@@ -126,13 +126,13 @@ class ChatPanel {
     #updateFooter() {
         const selection = this.#messageViewer.selection;
         if (selection.size === 0) {
-            this.#messageFooter.setMessage('Select one or more messages to add to book');
+            this.#messageFooter.setMessage('Select one or more messages to add to book...');
         } else if (!this.#book) {
             this.#messageFooter.setMessage('Open a book to add messages');
         } else if (selection.size === 1) {
-            this.#messageFooter.setAction(`Add ${selection.size} message to book ->`);
+            this.#messageFooter.setAction(`Add ${selection.size} message to book`);
         } else { // if (selection.size > 1) {
-            this.#messageFooter.setAction(`Add ${selection.size} messages to book ->`);
+            this.#messageFooter.setAction(`Add ${selection.size} messages to book`);
         }
     }
 }

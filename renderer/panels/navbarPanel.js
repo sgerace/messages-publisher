@@ -36,10 +36,16 @@ class NavbarPanel extends EventEmitter {
                 return;
             }
             currentActive.classList.remove('active');
+            const currentIcon = currentActive.querySelector('i');
+            currentIcon.classList.remove(currentIcon.dataset.alt);
+            currentIcon.classList.add(currentIcon.dataset.pri);
         }
         const item = this.node.querySelector(`[data-name="${name}"]`);
         if (item) {
             item.classList.add('active');
+            const icon = item.querySelector('i');
+            icon.classList.add(icon.dataset.alt);
+            icon.classList.remove(icon.dataset.pri);
             this.emit('activeChange', name);
         }
     }

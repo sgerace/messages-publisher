@@ -7,55 +7,104 @@
     flex: 1 1 auto;
     flex-direction: column;
     overflow-y: auto;
+    padding: 0 8px 8px 8px;
 
     div.message-container {
         display: flex;
         flex-direction: column;
-        font-family: 'Arial';
+        font-family: "Arial";
         user-select: none;
 
-        div.year {
-            background: $charcoal-25;
-            max-height: 40px;
-            min-height: 40px;
-            cursor: pointer;
-        }
+        div.date-sep {
+            margin-top: 8px;
 
-        div.month {
-            background: $charcoal-10;
-            max-height: 30px;
-            min-height: 30px;
-            cursor: pointer;
+            i.bi {
+                margin: 0 10px;
+            }
+
+            span {
+                font-weight: 500;
+            }
+
+            &.year {
+                $year-background: $charcoal-35;
+                $year-border: $charcoal-65;
+
+                align-items: center;
+                background: $year-background;
+                border-top: 1px solid $year-border;
+                border-top-left-radius: 1px solid $year-border;
+                border-top-right-radius: 1px solid $year-border;
+                border-left: 1px solid $year-border;
+                border-right: 1px solid $year-border;
+                border-radius: 6px 6px 0 0;
+                color: black;
+                cursor: pointer;
+                display: flex;
+                font-size: 16px;
+                max-height: 40px;
+                min-height: 40px;
+            }
+
+            &.month {
+                $month-background: #eae0e6;
+                $month-border: #c192ae;
+
+                align-items: center;
+                background: $month-background;
+                border-top: 1px solid $month-border;
+                border-top-left-radius: 1px solid $month-border;
+                border-top-right-radius: 1px solid $month-border;
+                border-left: 1px solid $month-border;
+                border-right: 1px solid $month-border;
+                border-radius: 6px 6px 0 0;
+                cursor: pointer;
+                display: flex;
+                font-size: 15px;
+                max-height: 30px;
+                min-height: 30px;
+
+                &.expanded {
+                    margin-bottom: 10px;
+                }
+            }
         }
 
         span.date {
             align-self: center;
             font-size: 12px;
-            margin: 4px 0;
+            margin: 6px 0 4px 0;
         }
 
         div.message {
             background: #e9e9eb;
+            border: 1px solid #e9e9eb;
             border-radius: 12px;
             box-sizing: border-box;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 10px;
+            margin: 0 8px 10px 8px;
             padding: 6px 10px;
             width: 80%;
             word-break: break-word;
 
             &.selected {
-                background: green;
+                background: #ffc353;
+                border: 1px solid #a67e34;
+                box-shadow: -4px 4px 5px $charcoal-90;
+                color: black;
             }
 
             &.from-me {
                 align-self: end;
                 background: #2292fe;
+                border: 1px solid #2292fe;
                 color: white;
 
                 &.selected {
-                    background: green;
+                    background: #ffc353;
+                    border: 1px solid #a67e34;
+                    color: black;
                 }
             }
 
@@ -65,7 +114,8 @@
             }
         }
 
-        .hidden-year, .hidden-month {
+        .hidden-year,
+        .hidden-month {
             display: none !important;
         }
     }

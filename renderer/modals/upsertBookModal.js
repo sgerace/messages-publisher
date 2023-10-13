@@ -43,7 +43,7 @@ class UpsertBookModal {
 
         // Configure modal for creating or editing
         const title = document.getElementById('upsert-book-title');
-        title.textContent = this.#book ? 'Edit Book' : 'Create Book';
+        title.textContent = this.#book ? 'Rename Book' : 'Create Book';
 
         // Show modal
         this.#modal.show();
