@@ -9,4 +9,22 @@ div#mp-sidebar-panel {
     flex-direction: column;
     max-width: 400px;
     min-width: 400px;
+
+    h1 {
+        color: $mp-blue;
+    }
+
+    .list-container {
+        font-size: 13px;
+
+        .list-group {
+            .list-group-item {
+                box-shadow: inset -7px 0 9px -7px #aaa;
+
+                &.active {
+                    background-color: $mp-blue;
+                }
+            }
+        }
+    }
 }

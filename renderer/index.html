@@ -21,16 +21,22 @@
         <!-- Root Navbar -->
         <div id="mp-navbar-panel">
             <div class="navbar-item" data-name="chats">
-                <i class="bi bi-chat"></i>
-                <span>Chats</span>
+                <div class="navbar-item-button">
+                    <i class="bi bi-chat-text" data-pri="bi-chat-text" data-alt="bi-chat-text-fill"></i>
+                    <span>Chats</span>
+                </div>
             </div>
             <div class="navbar-item" data-name="people">
-                <i class="bi bi-people"></i>
-                <span>People</span>
+                <div class="navbar-item-button">
+                    <i class="bi bi-people" data-pri="bi-people" data-alt="bi-people-fill"></i>
+                    <span>People</span>
+                </div>
             </div>
             <div class="navbar-item" data-name="books">
-                <i class="bi bi-book"></i>
-                <span>Books</span>
+                <div class="navbar-item-button">
+                    <i class="bi bi-journal-bookmark" data-pri="bi-journal-bookmark" data-alt="bi-journal-bookmark-fill"></i>
+                    <span>Books</span>
+                </div>
             </div>
         </div>
 
@@ -44,13 +50,13 @@
                     <h1>Chats</h1>
                 </nav>
                 <div class="mp-panel-filter-container">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">Search:</label>
+                        <input class="form-control" type="text" id="mp-chats-sidebar-filter-input">
+                    </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="mp-chats-sidebar-filter-only-named">
                         <label class="form-check-label" for="chats-filter-toggle">Only show named chats</label>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="input-group-text">Filter Chats:</label>
-                        <input class="form-control" type="text" id="mp-chats-sidebar-filter-input">
                     </div>
                 </div>
             </div>
@@ -62,7 +68,7 @@
                 </nav>
                 <div class="mp-panel-filter-container">
                     <div class="input-group mb-3">
-                        <label class="input-group-text">Filter People:</label>
+                        <label class="input-group-text">Search:</label>
                         <input class="form-control" type="text" id="mp-people-sidebar-filter-input">
                     </div>
                     <div class="form-check form-switch">
@@ -80,7 +86,7 @@
                 </nav>
                 <div class="mp-panel-filter-container">
                     <div class="input-group mb-3">
-                        <label class="input-group-text">Filter Books:</label>
+                        <label class="input-group-text">Search:</label>
                         <input class="form-control" type="text" id="mp-books-sidebar-filter-input">
                     </div>
                 </div>
@@ -94,15 +100,14 @@
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <!-- Chat Panel -->
             <div id="mp-chat-panel">
-                <nav class="navbar navbar-dark bg-dark">
-                    <span id="chat-panel-name" class="navbar-brand">Messages</span>
-                    <button id="chat-panel-select-date-range-btn" class="btn btn-secondary">
-                        <i class="bi bi-calendar"></i>
+                <div class="mp-content-header primary">
+                    <span class="subtitle">Chat</span>
+                    <h2 id="chat-panel-name"></h2>
+                    <button id="chat-panel-select-date-range-btn" class="btn btn-secondary btn-ico mar-rt">
+                        <i class="bi bi-calendar-check"></i>
                     </button>
-                    <button id="chat-panel-rename-btn" class="btn btn-secondary">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                </nav>
+                    <button id="chat-panel-rename-btn" class="btn btn-secondary">Rename</button>
+                </div>
                 <div class="mp-message-viewer"></div>
                 <div class="mp-message-footer lt"></div>
             </div>
@@ -110,18 +115,15 @@
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <!-- Book Panel -->
             <div id="mp-book-panel">
-                <nav class="navbar navbar-dark bg-dark">
-                    <span id="book-panel-name" class="navbar-brand">Book</span>
-                    <button id="book-panel-edit-btn" class="btn btn-secondary">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <button id="book-panel-delete-btn" class="btn btn-secondary">
+                <div class="mp-content-header secondary">
+                    <span class="subtitle">Book</span>
+                    <h2 id="book-panel-name" class="navbar-brand"></h2>
+                    <button id="book-panel-delete-btn" class="btn btn-secondary btn-ico mar-rt">
                         <i class="bi bi-trash"></i>
                     </button>
-                    <button id="book-panel-export-btn" class="btn btn-secondary">
-                        <i class="bi bi-send"></i>
-                    </button>
-                </nav>
+                    <button id="book-panel-edit-btn" class="btn btn-secondary mar-rt">Rename</button>
+                    <button id="book-panel-export-btn" class="btn btn-secondary">Export</button>
+                </div>
                 <div class="mp-message-viewer"></div>
                 <div class="mp-message-footer rt"></div>
             </div>
