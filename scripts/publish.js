@@ -5,7 +5,7 @@
 
 const fs = require('fs');
 
-const publisher = require('../../main/publisher');
+const publisher = require('../main/publisher');
 
 const book = JSON.parse(fs.readFileSync('./data/book3.json'));
 

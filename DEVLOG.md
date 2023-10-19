@@ -4,7 +4,7 @@
 
 Tried to get the environment up and running, seems as though I had to work on
 Windows directly as WSL was misbehaving.  Also needed to add a `shell: true`
-argument to `support/scripts/ops/sass.op.js`.
+argument to `scripts/ops/sass.op.js`.
 
 To get running we need to put `sms.db` in as `data/chat.db`.
 
@@ -25,7 +25,7 @@ stuff.  `messages.js` accesses the `chats.db` sqlite3 database and the
 
 The `sass` folder mirrors the `renderer` folder.
 
-`support` has the startup script stuff, developer conveniences.
+`scripts` has the startup script stuff, developer conveniences.
 
 Sal's way of things is to have each of the panels dom elements only interacted
 with in the panel's corresponding module.  To cross panel boundaries you should use either

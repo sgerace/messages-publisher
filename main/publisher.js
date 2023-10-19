@@ -15,7 +15,7 @@ const Messages = require('../renderer/services/messages');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Public functions
 
-async function run(window, book, dbPath, outputPath) {
+async function run(book, dbPath, outputPath, window) {
 
     // Create document
     const doc = new PdfDocument({
@@ -109,9 +109,15 @@ async function createBook(window, doc, book, messages, attachments) {
         doc.text(personText, doc.page.margins.left + 24, y);
         y += doc.heightOfString(personText, doc.page.margins.left + 24, y) + 4;
     }
-    y += 36;
+    y += 20;
 
-    // @TODO: Draw a horizontal rule here
+    // Draw horizontal rule
+    doc.lineWidth(HORIZONTAL_RULE_CONSTANTS.lineWidth);
+    doc.strokeColor(HORIZONTAL_RULE_CONSTANTS.color);
+    doc.moveTo(doc.page.margins.left, y);
+    doc.lineTo(doc.page.width - doc.page.margins.left, y); // Use left margin for symmetry
+    doc.stroke();
+    y += 36;
 
     // Render all messages
     let progress = 0;
@@ -175,7 +181,9 @@ async function createBook(window, doc, book, messages, attachments) {
         const p = Math.round(100 * (i + 1) / messages.length);
         if (p !== progress) {
             progress = p;
-            window.sender.send('exportBookProgress', progress);
+            if (window) {
+                window.sender.send('exportBookProgress', progress);
+            }
         }
     }
 }
@@ -417,6 +425,11 @@ const DATE_CONSTANTS = {
     fontSize: 10,
     fontColor: '#737b83',
     margin: 2
+};
+
+const HORIZONTAL_RULE_CONSTANTS = {
+    color: '#9ba1a6', // $charcoal-50
+    lineWidth: 1
 };
 
 const IMAGE_CONSTANTS = {
