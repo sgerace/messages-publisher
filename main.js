@@ -112,7 +112,7 @@ app.on('activate', function() {
 // Handles
 
 ipc.handle('exportBook', async (window, book, path) => {
-    await publisher.run(window, book, './data/chat.db', path);
+    await publisher.run(book, './data/chat.db', path, window);
 });
 
 ipc.handle('showSaveDialog', async (window, options) => {

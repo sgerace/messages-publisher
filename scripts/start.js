@@ -14,7 +14,7 @@ const minimatch = require('minimatch');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration
 
-const pkg = require('../../package.json');
+const pkg = require('../package.json');
 const config = Object.assign({
     watch: [],
     liveReload: {

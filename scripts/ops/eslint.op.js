@@ -15,7 +15,7 @@ const { ESLint } = require("eslint");
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration
 
-const pkg = require('../../../package.json');
+const pkg = require('../../package.json');
 const script = pkg.scripts.eslint;
 if (!script) {
     throw new Error('Unable to locate "eslint" script in package.json');

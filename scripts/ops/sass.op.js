@@ -10,7 +10,7 @@ const spawn = require('child_process').spawn;
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration
 
-const pkg = require('../../../package.json');
+const pkg = require('../../package.json');
 const script = pkg.scripts.sass;
 if (!script) {
     throw new Error('Unable to locate "sass" script in package.json');

@@ -6,10 +6,10 @@
   "main": "main.js",
   "scripts": {
     "build": "npm run sass && electron-builder --mac",
-    "eslint": "npx eslint --cache main renderer support main.js",
+    "eslint": "npx eslint --cache main renderer scripts main.js",
     "postinstall": "electron-builder install-app-deps",
     "sass": "npx sass sass/styles.scss assets/css/app.css",
-    "start": "node support/scripts/start.js"
+    "start": "node scripts/start.js"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.0",
@@ -41,13 +41,13 @@
       "assets/css/app.css",
       "main/**/*.{html,js}",
       "renderer/**/*.{html,js}",
-      "support/**/*.js",
+      "scripts/**/*.js",
       "main.js"
     ],
     "liveReload": {
       "port": 35739,
       "ignorePatterns": [
-        "support/**/*.js",
+        "scripts/**/*.js",
         "main.js"
       ]
     }
