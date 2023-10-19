@@ -4,7 +4,6 @@ on:
     - main
   push:
     branches:
-    - gh5-pipeline
     - main
     tags: 
     - 'v*'
@@ -46,9 +45,9 @@ jobs:
   ######################################################################
   # Build application and installer
 
-  build-mac:
+  build:
     runs-on: macos-latest
-    # if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: [test]
     steps:
 
