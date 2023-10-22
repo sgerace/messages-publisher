@@ -24,6 +24,7 @@ const services = {
 // Modals
 
 const modals = {
+    alert: require('./modals/alertModal').create(services),
     deleteBook: require('./modals/deleteBookModal').create(services),
     exportBook: require('./modals/exportBookModal').create(services),
     renameChat: require('./modals/renameChatModal').create(services),
@@ -73,9 +74,20 @@ sidebarPanel.sidebars.books.on('activeChange', (book) => {
 
 async function initialize() {
 
-    // Initialize services
+    // Initialize datastore service
     await services.datastore.open();
-    await services.messages.open();
+
+    // Initialize messages service
+    try {
+        await services.messages.open();
+    } catch (err) {
+        if (err.code === 'SQLITE_CANTOPEN') {
+            modals.alert.open('Additional Permissions Required', 'full-disk-access');
+        } else {
+            modals.alert.open('Unknown Error', 'unknown-error');
+        }
+        return;
+    }
 
     // Initialize panels
     await sidebarPanel.refresh();

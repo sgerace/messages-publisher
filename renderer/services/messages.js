@@ -26,14 +26,10 @@ class Messages {
 
     async open() {
 
-        // const userHomePath = await electron.ipcRenderer.invoke('getUserHomePath');
-        // const path = fspath.join(userHomePath, 'Library', 'Messages', 'chat.db');
-        const path = './data/chat.db';
-        // console.log(path);
-
         // Open database
         await new Promise((resolve, reject) => {
-            this.#db = new sqlite.Database(path, sqlite.OPEN_READONLY, (err) => {
+            const dbPath = process.env.MESSAGES_DB_PATH;
+            this.#db = new sqlite.Database(dbPath, sqlite.OPEN_READONLY, (err) => {
                 if (err) { reject(err); } else { resolve(); }
             });
         });

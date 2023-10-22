@@ -60,7 +60,10 @@ class NavbarPanel extends EventEmitter {
 
     #initializeEvents() {
         this.node.addEventListener('click', (ev) => {
-            this.setActive(ev.target.closest('.navbar-item').dataset.name);
+            const item = ev.target.closest('.navbar-item');
+            if (item) {
+                this.setActive(item.dataset.name);
+            }
         });
     }
 }
