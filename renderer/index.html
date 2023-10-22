@@ -130,6 +130,33 @@
         </div>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <!-- Alert Modal -->
+        <div class="modal fade" id="alert-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content alert-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5"></h1>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger" role="alert" data-code="full-disk-access">
+                            <p class="alert-message">Unable to open the Messages database. You must grant the Messages Publisher application Full Disk Access in System Settings. To do this, perform the following steps:</p>
+                            <ol>
+                                <li>Open "System Settings"</li>
+                                <li>Select "Privacy & Security"</li>
+                                <li>Select "Full Disk Access"</li>
+                                <li>Enable the setting for the "Messages Publisher" application</li>
+                            </ol>
+                            <p class="alert-message">Once you enable Full Disk Access, restart the application.</p>
+                        </div>
+                        <div class="alert alert-danger" role="alert" data-code="unknown-error">
+                            <p class="alert-message">Unable to open the Messages database. Unknown Error.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Delete Book Modal -->
         <div class="modal fade" id="delete-book-modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">

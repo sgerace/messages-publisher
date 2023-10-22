@@ -4,6 +4,7 @@
 'use strict';
 
 const electron = require('electron');
+const fspath = require('path');
 
 const app = electron.app; // Module to control application life
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window
@@ -15,7 +16,6 @@ const ipc = electron.ipcMain;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-// const menu = require('./main/menu');
 const BrowserWindowStateManager = require('./main/stateManager'); // Module to manage window state
 
 const publisher = require('./main/publisher');
@@ -25,7 +25,17 @@ const publisher = require('./main/publisher');
 // Configuration
 
 if (!process.env.DEBUG) {
-    process.env.NODE_ENV = "production";
+    process.env.NODE_ENV = 'production';
+}
+
+if (!process.env.MESSAGES_DB_PATH) {
+    const userHomePath = app.getPath('home');
+    process.env.MESSAGES_DB_PATH = fspath.join(userHomePath, 'Library', 'Messages', 'chat.db');
+}
+
+if (!process.env.DATASTORE_DB_PATH) {
+    const userDataPath = app.getPath('userData');
+    process.env.DATASTORE_DB_PATH = fspath.join(userDataPath, 'datastore.db');
 }
 
 
@@ -112,7 +122,7 @@ app.on('activate', function() {
 // Handles
 
 ipc.handle('exportBook', async (window, book, path) => {
-    await publisher.run(book, './data/chat.db', path, window);
+    await publisher.run(book, path, window);
 });
 
 ipc.handle('showSaveDialog', async (window, options) => {
@@ -127,10 +137,6 @@ ipc.handle('showSaveDialog', async (window, options) => {
         return filePath;
     }
 });
-
-ipc.handle('getUserDataPath', () => app.getPath('userData'));
-
-ipc.handle('getUserHomePath', () => app.getPath('home'));
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

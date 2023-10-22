@@ -1,0 +1,24 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Alert Modal Styles
+ */
+
+$red-dark: rgb(241, 174, 181);
+$red-darkest: rgb(88, 21, 28);
+
+div.modal-content.alert-modal {
+
+    .modal-header {
+        background-color: $red-dark;
+        color: $red-darkest;
+    }
+
+    .modal-body {
+        .alert {
+            margin: 0;
+
+            >:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

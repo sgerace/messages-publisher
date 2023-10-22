@@ -15,7 +15,7 @@ const Messages = require('../renderer/services/messages');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Public functions
 
-async function run(book, dbPath, outputPath, window) {
+async function run(book, outputPath, window) {
 
     // Create document
     const doc = new PdfDocument({
@@ -25,7 +25,7 @@ async function run(book, dbPath, outputPath, window) {
     doc.pipe(fs.createWriteStream(outputPath));
 
     // Initialize and open messages client
-    const messagesClient = new Messages(dbPath);
+    const messagesClient = new Messages();
     await messagesClient.open();
 
     // Get messages and attachments

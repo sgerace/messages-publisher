@@ -1,25 +1,22 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Export Book Modal
+ * Delete Book Modal
  */
 
 const bootstrap = require('bootstrap');
-const electron = require('electron');
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Modal
 
-class ExportBookModal {
+class AlertModal {
 
     // Private globals
     #services = null;
     #modal = null;
 
     // Private elements
-    #progress = null;
-
-    // Private data
-    #book = null;
+    #titleNode = null;
+    #messageNode = null;
 
     // Public variables
     node = null;
@@ -37,21 +34,16 @@ class ExportBookModal {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public methods
 
-    async open(book, path) {
-        this.#book = book;
+    open(title, code) {
+        this.#titleNode.textContent = title;
+        this.node.querySelectorAll('.alert').forEach(x => {
+            if (x.dataset.code === code) {
+                x.classList.remove('hidden');
+            } else {
+                x.classList.add('hidden');
+            }
+        });
         this.#modal.show();
-
-        // Initialize progress bar
-        this.#progress.style.width = '0%';
-
-        // Export book
-        const progressHandler = (sender, value) => this.#setProgress(value);
-        electron.ipcRenderer.on('exportBookProgress', progressHandler);
-        await electron.ipcRenderer.invoke('exportBook', book, path);
-        electron.ipcRenderer.off('exportBookProgress', progressHandler);
-
-        // @TODO: Need to understand why this only works with a 500ms+ delay
-        setTimeout(() => this.#modal.hide(), 500);
     }
 
 
@@ -59,16 +51,13 @@ class ExportBookModal {
     // Private methods
 
     #initialize() {
-        this.node = document.getElementById('export-book-modal');
+        this.node = document.getElementById('alert-modal');
+        this.#titleNode = this.node.querySelector('h1.modal-title');
+        this.#messageNode = this.node.querySelector('p.alert-message');
         this.#modal = new bootstrap.Modal(this.node, {
             backdrop: 'static',
             keyboard: false
         });
-        this.#progress = document.getElementById('export-book-progress');
-    }
-
-    #setProgress(value) {
-        this.#progress.style.width = `${value}%`;
     }
 }
 
@@ -78,6 +67,6 @@ class ExportBookModal {
 
 module.exports = {
     create: (services) => {
-        return new ExportBookModal(services);
+        return new AlertModal(services);
     }
 };

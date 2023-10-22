@@ -2,9 +2,7 @@
  * Datastore Service
  */
 
-const electron = require('electron');
 const EventEmitter = require('eventemitter3');
-const fspath = require('path');
 const sqlite = require('sqlite3');
 
 
@@ -74,14 +72,10 @@ class Datastore extends EventEmitter {
 
     async open() {
 
-        // Get user data path and append database name
-        const userDataPath = await electron.ipcRenderer.invoke('getUserDataPath');
-        const path = fspath.join(userDataPath, 'datastore.db');
-
         // Open database
         await new Promise((resolve, reject) => {
             const mode = sqlite.OPEN_READWRITE | sqlite.OPEN_CREATE | sqlite.OPEN_FULLMUTEX;
-            this.#db = new sqlite.Database(path, mode, (err) => {
+            this.#db = new sqlite.Database(process.env.DATASTORE_DB_PATH, mode, (err) => {
                 if (err) { reject(err); } else { resolve(); }
             });
         });
