@@ -1,6 +1,6 @@
 {
   "name": "messages-publisher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Sal Gerace",
   "description": "A tool for publishing Apple Messages as a PDF",
   "main": "main.js",
