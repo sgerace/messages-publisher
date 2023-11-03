@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # Rendered assets
-assets/
+assets/css/
 
 # Data
 data/
