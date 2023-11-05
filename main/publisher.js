@@ -19,7 +19,7 @@ async function run(book, outputPath, window) {
 
     // Create document
     const doc = new PdfDocument({
-        font: fspath.resolve('./assets/fonts/NotoSansEmoji-Regular.ttf'),
+        font: fspath.resolve(fspath.join(__dirname, '../assets/fonts/NotoSansEmoji-Regular.ttf')),
         margins: { top: 50, left: 72, bottom: 50, right: 120 }
     });
     doc.pipe(fs.createWriteStream(outputPath));
