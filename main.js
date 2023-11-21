@@ -4,7 +4,9 @@
 'use strict';
 
 const electron = require('electron');
+const fs = require('fs/promises');
 const fspath = require('path');
+const url = require('url');
 
 const app = electron.app; // Module to control application life
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window
@@ -45,6 +47,11 @@ if (!process.env.DATASTORE_DB_PATH) {
 Promise.all([
     electron.app.whenReady()
 ]).then(function() {
+    electron.protocol.registerFileProtocol('mpimage', (request, callback) => {
+        const filePath = url.fileURLToPath('file://' + request.url.slice('mpimage://'.length));
+        callback(filePath);
+    });
+}).then(function() {
     createWindow();
 });
 
@@ -123,6 +130,15 @@ app.on('activate', function() {
 
 ipc.handle('exportBook', async (window, book, path) => {
     await publisher.run(book, path, window);
+});
+
+ipc.handle('savePhoto', async (window, options) => {
+    const { canceled, filePath } = await electron.dialog.showSaveDialog({
+        defaultPath: options.filename
+    });
+    if (!canceled) {
+        await fs.copyFile(options.src, filePath);
+    }
 });
 
 ipc.handle('showSaveDialog', async (window, options) => {

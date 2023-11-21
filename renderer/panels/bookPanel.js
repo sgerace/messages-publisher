@@ -3,6 +3,7 @@
  */
 
 const electron = require('electron');
+const os = require('os');
 const MessageFooter = require('../components/messageFooter');
 const MessageViewer = require('../components/messageViewer');
 
@@ -21,6 +22,7 @@ class BookPanel {
 
     // Private elements
     #headerSpan = null;
+    #openPhotosButton = null;
     #deleteButton = null;
     #editButton = null;
     #exportButton = null;
@@ -125,6 +127,8 @@ class BookPanel {
         this.#headerSpan = document.getElementById('book-panel-name');
 
         // Initialize buttons
+        this.#openPhotosButton = document.getElementById('book-panel-open-photos-btn');
+        this.#openPhotosButton.addEventListener('click', () => this.#openSlideshow());
         this.#deleteButton = document.getElementById('book-panel-delete-btn');
         this.#deleteButton.addEventListener('click', () => this.#deleteBook());
         this.#editButton = document.getElementById('book-panel-edit-btn');
@@ -161,6 +165,30 @@ class BookPanel {
         });
     }
 
+    async #openSlideshow() {
+        const selection = this.#messageViewer.selection;
+        let messages = this.#messageViewer.messages;
+        if (selection.size) {
+            messages = messages.filter(x => selection.has(x.id));
+        }
+        const attachments = [];
+        for (let i = 0; i < messages.length; ++i) {
+            const m = messages[i];
+            const a = this.#messageViewer.attachments.get(m.id);
+            if (a) {
+                attachments.push(...a.filter(x => {
+                    return this.#modals.slideshow.supportsMimeType(x.mime_type);
+                }).map(x => ({
+                    date: m.date,
+                    filename: x.filename.replace(/^~/, os.homedir())
+                })));
+            }
+        }
+        if (attachments.length) {
+            await this.#modals.slideshow.open(attachments);
+        }
+    }
+
     async #removeSelectionFromBook() {
         const selection = this.#messageViewer.selection;
         await this.#services.datastore.removeMessagesFromBook(this.#book.id, selection);
@@ -174,7 +202,8 @@ class BookPanel {
     async #updateBookMessages() {
         const messageIds = await this.#services.datastore.getMessagesByBook(this.#book.id);
         const messages = await this.#services.messages.getMessagesById(messageIds);
-        this.#messageViewer.setMessages(messages);
+        const attachments = await this.#services.messages.getAttachments(messages.map(x => x.id));
+        this.#messageViewer.setMessages(messages, attachments);
     }
 
     #updateFooter() {

@@ -103,6 +103,9 @@
                 <div class="mp-content-header primary">
                     <span class="subtitle">Chat</span>
                     <h2 id="chat-panel-name"></h2>
+                    <button id="chat-panel-open-photos-btn" class="btn btn-secondary btn-ico mar-rt">
+                        <i class="bi bi-images"></i>
+                    </button>
                     <button id="chat-panel-select-date-range-btn" class="btn btn-secondary btn-ico mar-rt">
                         <i class="bi bi-calendar-check"></i>
                     </button>
@@ -118,6 +121,9 @@
                 <div class="mp-content-header secondary">
                     <span class="subtitle">Book</span>
                     <h2 id="book-panel-name" class="navbar-brand"></h2>
+                    <button id="book-panel-open-photos-btn" class="btn btn-secondary btn-ico mar-rt">
+                        <i class="bi bi-images"></i>
+                    </button>
                     <button id="book-panel-delete-btn" class="btn btn-secondary btn-ico mar-rt">
                         <i class="bi bi-trash"></i>
                     </button>
@@ -281,6 +287,32 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Slideshow -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <div id="slideshow" class="hidden">
+        <div class="slideshow-header">
+            <i class="bi bi-image slideshow-header-image"></i>
+            <h2 id="slideshow-filename">Filename</h2>
+            <span id="slideshow-index">1 of 3</span>
+            <button id="slideshow-header-prev-btn" class="btn btn-secondary btn-ico mar-rt">
+                <i class="bi bi-arrow-left-circle"></i>
+            </button>
+            <button id="slideshow-header-next-btn" class="btn btn-secondary btn-ico mar-rt">
+                <i class="bi bi-arrow-right-circle"></i>
+            </button>
+            <button id="slideshow-header-save-btn" class="btn btn-secondary btn-ico mar-rt">
+                <i class="bi bi-floppy"></i>
+            </button>
+            <button id="slideshow-header-close-btn" class="btn btn-secondary btn-ico mar-rt">
+                <i class="bi bi-x-circle"></i>
+            </button>
+        </div>
+        <div class="content">
+            <img id="slideshow-image" />
         </div>
     </div>
 
