@@ -1,0 +1,79 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Slideshow
+ */
+
+#slideshow {
+    align-items: stretch;
+    background-color: rgba(0, 0, 0, 0.8);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 8000;
+
+    $slideshow-header-height: 60px;
+    $slideshow-header-background: #f7f7f7;
+
+    .slideshow-header {
+        align-items: center;
+        align-self: stretch;
+        background-color: $slideshow-header-background;
+        border-bottom: 1px solid $charcoal-100;
+        box-sizing: border-box;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        min-height: $slideshow-header-height;
+        padding: 0 7px 0 16px;
+
+        i.slideshow-header-image {
+            color: $mp-purple;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        h2#slideshow-filename {
+            color: $mp-purple;
+            flex: 1 1 auto;
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        span#slideshow-index {
+            color: $charcoal-100;
+            margin-right: 8px;
+        }
+
+        button {
+            background-color: $slideshow-header-background;
+            border: none;
+            color: $charcoal-100;
+
+            &:hover {
+                background-color: $charcoal-15;
+            }
+        }
+    }
+
+    .content {
+        align-items: center;
+        bottom: 10px;
+        display: flex;
+        justify-content: center;
+        left: 10px;
+        position: absolute;
+        right: 10px;
+        top: $slideshow-header-height + 10px;
+
+        img {
+            background-color: white;
+            max-height: 100%;
+            object-fit: contain;
+            max-width: 100%;
+        }
+    }
+}

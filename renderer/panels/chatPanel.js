@@ -2,6 +2,7 @@
  * Chat Panel
  */
 
+const os = require('os');
 const MessageFooter = require('../components/messageFooter');
 const MessageViewer = require('../components/messageViewer');
 
@@ -22,8 +23,9 @@ class ChatPanel {
 
     // Private elements
     #headerSpan = null;
-    #editButton = null;
+    #openPhotosButton = null;
     #dateRangeButton = null;
+    #editButton = null;
 
     // Private components
     #messageFooter = null;
@@ -61,7 +63,8 @@ class ChatPanel {
         this.#updateChatName();
 
         const messages = await this.#services.messages.getMessagesByChat(this.#chat.id);
-        this.#messageViewer.setMessages(messages);
+        const attachments = await this.#services.messages.getAttachments(messages.map(x => x.id));
+        this.#messageViewer.setMessages(messages, attachments);
         this.#updateFooter();
     }
 
@@ -83,6 +86,10 @@ class ChatPanel {
 
         // Initialize header
         this.#headerSpan = document.getElementById('chat-panel-name');
+
+        // Initialize slideshow button
+        this.#openPhotosButton = document.getElementById('chat-panel-open-photos-btn');
+        this.#openPhotosButton.addEventListener('click', () => this.#openSlideshow());
 
         // Initialize date range button
         this.#dateRangeButton = document.getElementById('chat-panel-select-date-range-btn');
@@ -116,6 +123,30 @@ class ChatPanel {
 
     #initializeEvents() {
         this.#services.datastore.on('chatNameChange', () => this.#updateChatName());
+    }
+
+    async #openSlideshow() {
+        const selection = this.#messageViewer.selection;
+        let messages = this.#messageViewer.messages;
+        if (selection.size) {
+            messages = messages.filter(x => selection.has(x.id));
+        }
+        const attachments = [];
+        for (let i = 0; i < messages.length; ++i) {
+            const m = messages[i];
+            const a = this.#messageViewer.attachments.get(m.id);
+            if (a) {
+                attachments.push(...a.filter(x => {
+                    return this.#modals.slideshow.supportsMimeType(x.mime_type);
+                }).map(x => ({
+                    date: m.date,
+                    filename: x.filename.replace(/^~/, os.homedir())
+                })));
+            }
+        }
+        if (attachments.length) {
+            await this.#modals.slideshow.open(attachments);
+        }
     }
 
     #updateChatName() {

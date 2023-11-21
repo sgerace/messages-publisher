@@ -12,6 +12,8 @@ class MessageViewer extends EventEmitter {
     #messageNodes = [];
     #messageContainer = null;
 
+    #attachments = new Map();
+
     // Selections
     #selection = new Set();
     #monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" });
@@ -28,6 +30,8 @@ class MessageViewer extends EventEmitter {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public properties
+
+    get attachments() { return this.#attachments; }
 
     get endDate() { return this.#messages[this.#messages.length - 1].date; }
 
@@ -77,8 +81,9 @@ class MessageViewer extends EventEmitter {
         }
     }
 
-    setMessages(messages) {
+    setMessages(messages, attachments) {
         this.#messages = messages;
+        this.#attachments = attachments;
 
         // Clear selection (remembering if items were selected)
         const selectionChange = this.#selection.size;

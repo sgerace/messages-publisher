@@ -30,6 +30,7 @@ const modals = {
     renameChat: require('./modals/renameChatModal').create(services),
     renamePerson: require('./modals/renamePersonModal').create(services),
     selectDateRange: require('./modals/selectDateRangeModal').create(services),
+    slideshow: require('./modals/slideshow').create(services),
     upsertBook: require('./modals/upsertBookModal').create(services)
 };
 
