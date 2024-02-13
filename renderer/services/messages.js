@@ -88,10 +88,13 @@ class Messages {
     }
 
     async getAttachments(messageIds) {
+        // I originally implemented this with `AND a.is_outgoing IS FALSE` which seemed
+        // to prevent HEIC files from being selected. I'm not 100% sure if it had any other
+        // effects but it does not seem to duplicate any images.
         const rows = await this.#all('SELECT a.ROWID AS id, maj.message_id, a.filename, a.mime_type ' +
             'FROM message_attachment_join maj ' +
             'JOIN attachment a ON a.ROWID = maj.attachment_id ' +
-            `WHERE maj.message_id IN (${messageIds.join(',')}) AND a.filename IS NOT NULL AND a.is_outgoing IS FALSE;`); // @TODO: Figure out proper escape syntax
+            `WHERE maj.message_id IN (${messageIds.join(',')}) AND a.filename IS NOT NULL;`); // @TODO: Figure out proper escape syntax
         const map = new Map();
         for (let i = 0; i < rows.length; ++i) {
             const row = rows[i];

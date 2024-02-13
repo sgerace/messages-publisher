@@ -114,6 +114,32 @@
             }
         }
 
+        div.image {
+            margin: 0 8px 10px 8px;
+            max-height: 400px;
+            max-width: 400px;
+
+            &.selected {
+                img {
+                    box-shadow: -4px 4px 5px $charcoal-90;
+                }
+            }
+
+            &.from-me {
+                align-self: end;
+            }
+
+            img {
+                border-radius: 12px;
+                height: auto;
+                max-height: 100%;
+                max-width: 100%;
+                object-fit: contain;
+                object-position: left top;
+                width: auto;
+            }
+        }
+
         .hidden-year,
         .hidden-month {
             display: none !important;
