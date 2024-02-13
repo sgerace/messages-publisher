@@ -87,7 +87,8 @@
     "appId": "org.sa6.messages-publisher",
     "asar": true,
     "asarUnpack": [
-      "**/node_modules/sharp/**/*"
+      "**/node_modules/sharp/**/*",
+      "**/node_modules/@img/**/*"
     ],
     "mac": {
       "category": "public.app-category.productivity",
