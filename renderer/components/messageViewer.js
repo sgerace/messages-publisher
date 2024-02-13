@@ -2,6 +2,7 @@
  * Message Viewer Component
  */
 
+const os = require('os');
 const EventEmitter = require('eventemitter3');
 
 class MessageViewer extends EventEmitter {
@@ -9,7 +10,6 @@ class MessageViewer extends EventEmitter {
     node = null;
 
     #messages = null;
-    #messageNodes = [];
     #messageContainer = null;
 
     #attachments = new Map();
@@ -94,7 +94,6 @@ class MessageViewer extends EventEmitter {
         container.className = 'message-container';
 
         // Construct messages
-        const nodes = new Array(messages.length);
         let date = new Date(0);
         let currentYear = date.getFullYear();
         let currentMonth = -1;
@@ -134,26 +133,41 @@ class MessageViewer extends EventEmitter {
                 container.append(dateSpan);
             }
 
+            // Create div for message
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
+            if (message.is_from_me) {
+                messageDiv.classList.add('from-me');
+            }
             messageDiv.dataset.id = message.id;
             messageDiv.dataset.index = i;
             messageDiv.dataset.type = 'message';
             const p = document.createElement('p');
             p.textContent = message.text;
-
-            if (message.is_from_me) {
-                messageDiv.classList.add('from-me');
-            }
-
-            nodes[i] = messageDiv;
-
             messageDiv.append(p);
             container.append(messageDiv);
+
+            // Create lazy-loaded images for attachments
+            const messageAttachments = this.#attachments.get(message.id);
+            if (messageAttachments) {
+                for (let j = 0; j < messageAttachments.length; ++j) {
+                    const attachment = messageAttachments[j];
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = 'image';
+                    imgDiv.dataset.message = message.id;
+                    if (message.is_from_me) {
+                        imgDiv.classList.add('from-me');
+                    }
+                    const img = document.createElement('img');
+                    img.src = `mpimage://${attachment.filename.replace(/^~/, os.homedir())}`;
+                    img.loading = 'lazy';
+                    imgDiv.append(img);
+                    container.append(imgDiv);
+                }
+            }
         }
 
         // Replace current message container
-        this.#messageNodes = nodes;
         this.#messageContainer.replaceWith(container);
         this.#messageContainer = container;
 
@@ -230,6 +244,11 @@ class MessageViewer extends EventEmitter {
             this.#selection.add(id);
         }
         message.classList.toggle('selected');
+        let iter = message.nextSibling;
+        while (iter && iter.dataset.message === message.dataset.id) {
+            iter.classList.toggle('selected');
+            iter = iter.nextSibling;
+        }
         this.emit('selectionChange', this.#selection);
     }
 }

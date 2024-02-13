@@ -3,10 +3,12 @@
  */
 'use strict';
 
+process.env.MESSAGES_DB_PATH = './data/chat.db';
+
 const fs = require('fs');
 
 const publisher = require('../main/publisher');
 
-const book = JSON.parse(fs.readFileSync('./data/book3.json'));
+const book = JSON.parse(fs.readFileSync('./data/book4.json'));
 
-publisher.run(book, './data/chat.db', './data/test.pdf');
+publisher.run(book, './data/test.pdf');

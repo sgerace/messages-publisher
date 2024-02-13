@@ -5,6 +5,7 @@
 const emojiRegex = require('emoji-regex');
 const fs = require('fs');
 const fspath = require('path');
+const heicConvert = require('heic-convert');
 const os = require('os');
 const PdfDocument = require('pdfkit');
 const sharp = require('sharp');
@@ -211,7 +212,17 @@ function prepareDate(doc, date) {
 
 async function prepareImage(doc, message, attachment) {
     const filename = attachment.filename.replace(/^~/, os.homedir());
-    const { data, info } = await sharp(filename)
+    const ext = fspath.extname(filename);
+    let source = filename;
+    if (ext.toLowerCase() === '.heic') {
+        const heicBuffer = await fs.promises.readFile(filename);
+        source = await heicConvert({
+            buffer: heicBuffer,
+            format: 'JPEG',
+            quality: 1
+        });
+    }
+    const { data, info } = await sharp(source)
         .resize({
             width: IMAGE_CONSTANTS.fitWidth * IMAGE_CONSTANTS.scale,
             height: IMAGE_CONSTANTS.fitHeight * IMAGE_CONSTANTS.scale,

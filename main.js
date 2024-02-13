@@ -6,7 +6,7 @@
 const electron = require('electron');
 const fs = require('fs/promises');
 const fspath = require('path');
-const url = require('url');
+const heicConvert = require('heic-convert');
 
 const app = electron.app; // Module to control application life
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window
@@ -47,9 +47,21 @@ if (!process.env.DATASTORE_DB_PATH) {
 Promise.all([
     electron.app.whenReady()
 ]).then(function() {
-    electron.protocol.registerFileProtocol('mpimage', (request, callback) => {
-        const filePath = url.fileURLToPath('file://' + request.url.slice('mpimage://'.length));
-        callback(filePath);
+    electron.protocol.handle('mpimage', async (request) => {
+        const path = request.url.slice('mpimage://'.length);
+        const ext = fspath.extname(path);
+        if (ext.toLowerCase() === '.heic') {
+            const jpeg = await heicConvert({
+                buffer: await fs.readFile(path),
+                format: 'JPEG',
+                quality: 1
+            });
+            return new Response(jpeg, {
+                headers: { 'content-type': 'image/jpeg' }
+            });
+        } else {
+            return electron.net.fetch('file://' + request.url.slice('mpimage://'.length));
+        }
     });
 }).then(function() {
     createWindow();
