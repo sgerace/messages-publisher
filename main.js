@@ -140,8 +140,8 @@ app.on('activate', function() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Handles
 
-ipc.handle('exportBook', async (window, book, path) => {
-    await publisher.run(book, path, window);
+ipc.handle('exportBook', async (window, options) => {
+    await publisher.run(options, window);
 });
 
 ipc.handle('savePhoto', async (window, options) => {

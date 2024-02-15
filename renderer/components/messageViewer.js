@@ -17,6 +17,7 @@ class MessageViewer extends EventEmitter {
     // Selections
     #selection = new Set();
     #monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" });
+    #showImages = false;
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,6 +41,14 @@ class MessageViewer extends EventEmitter {
     get selection() { return this.#selection; }
 
     get startDate() { return this.#messages[0].date; }
+
+    get showImages() { return this.#showImages; }
+    set showImages(value) {
+        this.#showImages = value;
+        if (this.#messages && this.#attachments) {
+            this.setMessages(this.#messages, this.#attachments);
+        }
+    }
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,21 +157,23 @@ class MessageViewer extends EventEmitter {
             container.append(messageDiv);
 
             // Create lazy-loaded images for attachments
-            const messageAttachments = this.#attachments.get(message.id);
-            if (messageAttachments) {
-                for (let j = 0; j < messageAttachments.length; ++j) {
-                    const attachment = messageAttachments[j];
-                    const imgDiv = document.createElement('div');
-                    imgDiv.className = 'image';
-                    imgDiv.dataset.message = message.id;
-                    if (message.is_from_me) {
-                        imgDiv.classList.add('from-me');
+            if (this.#showImages) {
+                const messageAttachments = this.#attachments.get(message.id);
+                if (messageAttachments) {
+                    for (let j = 0; j < messageAttachments.length; ++j) {
+                        const attachment = messageAttachments[j];
+                        const imgDiv = document.createElement('div');
+                        imgDiv.className = 'image';
+                        imgDiv.dataset.message = message.id;
+                        if (message.is_from_me) {
+                            imgDiv.classList.add('from-me');
+                        }
+                        const img = document.createElement('img');
+                        img.src = `mpimage://${attachment.filename.replace(/^~/, os.homedir())}`;
+                        img.loading = 'lazy';
+                        imgDiv.append(img);
+                        container.append(imgDiv);
                     }
-                    const img = document.createElement('img');
-                    img.src = `mpimage://${attachment.filename.replace(/^~/, os.homedir())}`;
-                    img.loading = 'lazy';
-                    imgDiv.append(img);
-                    container.append(imgDiv);
                 }
             }
         }

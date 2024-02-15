@@ -98,11 +98,13 @@ class Messages {
         const map = new Map();
         for (let i = 0; i < rows.length; ++i) {
             const row = rows[i];
-            let attachments = map.get(row.message_id);
-            if (!attachments) {
-                map.set(row.message_id, (attachments = []));
+            if (Messages.SUPPORTED_IMAGE_TYPES[row.mime_type]) {
+                let attachments = map.get(row.message_id);
+                if (!attachments) {
+                    map.set(row.message_id, (attachments = []));
+                }
+                attachments.push(row);
             }
-            attachments.push(row);
         }
         return map;
     }
@@ -192,6 +194,13 @@ class Messages {
     /// - <https://www.compart.com/en/unicode/U+0086>
     /// - <https://www.compart.com/en/unicode/U+0084>
     static END_ATTRIBUTED_BODY_PATTERN = Buffer.from([0x0086, 0x0084]);
+
+    // Image types supported (must match `SUPPORTED_IMAGE_TYPES` in publisher)
+    static SUPPORTED_IMAGE_TYPES = {
+        'image/heic': true,
+        'image/jpeg': true,
+        'image/png': true,
+    };
 }
 
 

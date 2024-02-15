@@ -5,6 +5,7 @@
 const BooksSidebar = new require('./sidebars/booksSidebar');
 const ChatsSidebar = new require('./sidebars/chatsSidebar');
 const PeopleSidebar = new require('./sidebars/peopleSidebar');
+const SettingsSidebar = new require('./sidebars/settingsSidebar');
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -63,7 +64,8 @@ class SidebarPanel {
         this.sidebars = {
             books: new BooksSidebar(this.#services, this.#modals),
             chats: new ChatsSidebar(this.#services, this.#modals),
-            people: new PeopleSidebar(this.#services, this.#modals)
+            people: new PeopleSidebar(this.#services, this.#modals),
+            settings: new SettingsSidebar(this.#services, this.#modals)
         };
     }
 }

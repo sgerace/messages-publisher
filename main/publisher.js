@@ -16,20 +16,21 @@ const Messages = require('../renderer/services/messages');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Public functions
 
-async function run(book, outputPath, window) {
+async function run(options, window) {
 
     // Create document
     const doc = new PdfDocument({
         font: fspath.resolve(fspath.join(__dirname, '../assets/fonts/NotoSansEmoji-Regular.ttf')),
         margins: { top: 50, left: 72, bottom: 50, right: 120 }
     });
-    doc.pipe(fs.createWriteStream(outputPath));
+    doc.pipe(fs.createWriteStream(options.outputPath));
 
     // Initialize and open messages client
     const messagesClient = new Messages();
     await messagesClient.open();
 
     // Get messages and attachments
+    const book = options.book;
     const messages = await messagesClient.getMessagesById(book.messages);
     const attachments = await messagesClient.getAttachments(book.messages);
 

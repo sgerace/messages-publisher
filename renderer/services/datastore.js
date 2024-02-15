@@ -17,6 +17,12 @@ class Datastore extends EventEmitter {
     #chatNames = new Map();
     #handleNames = new Map();
 
+    #settings = {
+        personalId: null,
+        showImagesBook: false,
+        showImagesChat: false
+    };
+
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructor
@@ -70,6 +76,10 @@ class Datastore extends EventEmitter {
         })).map(x => x.message_id);
     }
 
+    getSetting(key) {
+        return this.#settings[key];
+    }
+
     async open() {
 
         // Open database
@@ -114,7 +124,7 @@ class Datastore extends EventEmitter {
 
     resolveHandleName(id) {
         if (id === null) {
-            return { id: null, value: 'Me' }; // @TODO: Eventually set this in the database
+            return { id: null, value: this.resolveMeName() };
         }
         const name = id ? this.#handleNames.get(id) : undefined;
         return {
@@ -122,6 +132,10 @@ class Datastore extends EventEmitter {
             hasName: !!name,
             value: name ? name : id
         };
+    }
+
+    resolveMeName() {
+        return this.#settings.personalId || 'Me';
     }
 
     async setBookInfo(id, info) {
@@ -151,6 +165,18 @@ class Datastore extends EventEmitter {
         });
         this.#handleNames.set(id, name);
         this.emit('handleNameChange', id, name);
+    }
+
+    async setSetting(key, value) {
+        if (this.#settings[key] !== value) {
+            await this.#run('INSERT OR REPLACE INTO settings (key, value) VALUES ($key, $value);', {
+                $key: key,
+                $value: value
+            });
+            this.#settings[key] = value;
+            this.emit('settingChange', key, value);
+        }
+        return value;
     }
 
 
@@ -204,6 +230,31 @@ class Datastore extends EventEmitter {
             '    ON UPDATE NO ACTION',
             ');'
         ].join(''));
+
+        // Ensure settings table exists
+        await this.#run([
+            'CREATE TABLE IF NOT EXISTS settings (',
+            '  key TEXT PRIMARY KEY,',
+            '  value TEXT NOT NULL',
+            ');'
+        ].join(''));
+
+        // Get settings
+        const settings = await this.#all('SELECT * FROM settings;');
+        for (let i = 0; i < settings.length; ++i) {
+            const x = settings[i];
+            const type = Datastore.SETTINGS_TYPES[x.key];
+            let value;
+            if (type === 'boolean') {
+                value = x.value === '1';
+            } else if (type === 'string') {
+                value = x.value;
+            }
+            if (this.#settings[x.key] !== value) {
+                this.#settings[x.key] = value;
+                this.emit('settingChange', x.key, value);
+            }
+        }
     }
 
     async #initializeBooks() {
@@ -229,6 +280,16 @@ class Datastore extends EventEmitter {
             });
         });
     }
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Private constants
+
+    static SETTINGS_TYPES = {
+        personalId: 'string',
+        showImagesBook: 'boolean',
+        showImagesChat: 'boolean'
+    };
 }
 
 

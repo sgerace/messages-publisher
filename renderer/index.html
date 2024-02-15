@@ -38,6 +38,12 @@
                     <span>Books</span>
                 </div>
             </div>
+            <div class="navbar-item" data-name="settings">
+                <div class="navbar-item-button">
+                    <i class="bi bi-gear" data-pri="bi-gear" data-alt="bi-gear-fill"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
         </div>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -88,6 +94,27 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text">Search:</label>
                         <input class="form-control" type="text" id="mp-books-sidebar-filter-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Sidebar -->
+            <div id="mp-settings-sidebar" class="hidden">
+                <nav class="mp-panel-header">
+                    <h1>Settings</h1>
+                </nav>
+                <div class="mp-panel-filter-container">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text">Personal identifier:</label>
+                        <input class="form-control" type="text" id="mp-settings-sidebar-personal-id" placeholder="Me">
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="mp-settings-sidebar-show-images-chat">
+                        <label class="form-check-label" for="mp-settings-sidebar-show-images-chat">Show images in Chat</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="mp-settings-sidebar-show-images-book">
+                        <label class="form-check-label" for="mp-settings-sidebar-show-images-book">Show images in Book</label>
                     </div>
                 </div>
             </div>

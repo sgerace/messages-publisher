@@ -103,6 +103,13 @@ class BookPanel {
                 });
             }
         }
+        if (!peopleLookup.has(null)) {
+            peopleLookup.add(null);
+            people.push({
+                id: null,
+                name: this.#services.datastore.resolveMeName()
+            });
+        }
         const book = {
             name: this.#book.name,
             messages: messages.map(x => x.id),
@@ -138,6 +145,7 @@ class BookPanel {
 
         // Initialize message viewer
         this.#messageViewer = new MessageViewer(this.node.querySelector('.mp-message-viewer'));
+        this.#messageViewer.showImages = this.#services.datastore.getSetting('showImagesBook');
         this.#messageViewer.on('selectionChange', () => this.#updateFooter());
         this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
         this.#messageFooter.on('action', () => this.#removeSelectionFromBook());
@@ -163,6 +171,7 @@ class BookPanel {
                 this.#updateBookMessages();
             }
         });
+        this.#services.datastore.on('settingChange', (key, value) => this.#settingChange(key, value));
     }
 
     async #openSlideshow() {
@@ -193,6 +202,12 @@ class BookPanel {
         const selection = this.#messageViewer.selection;
         await this.#services.datastore.removeMessagesFromBook(this.#book.id, selection);
         this.#messageViewer.clearSelection();
+    }
+
+    #settingChange(key, value) {
+        if (key === 'showImagesBook') {
+            this.#messageViewer.showImages = value;
+        }
     }
 
     #updateBookName() {

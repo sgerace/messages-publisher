@@ -11,4 +11,7 @@ const publisher = require('../main/publisher');
 
 const book = JSON.parse(fs.readFileSync('./data/book4.json'));
 
-publisher.run(book, './data/test.pdf');
+publisher.run({
+    book,
+    outputPath: './data/test.pdf'
+});

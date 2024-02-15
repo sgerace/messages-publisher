@@ -37,7 +37,7 @@ class ExportBookModal {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Public methods
 
-    async open(book, path) {
+    async open(book, outputPath) {
         this.#book = book;
         this.#modal.show();
 
@@ -47,7 +47,7 @@ class ExportBookModal {
         // Export book
         const progressHandler = (sender, value) => this.#setProgress(value);
         electron.ipcRenderer.on('exportBookProgress', progressHandler);
-        await electron.ipcRenderer.invoke('exportBook', book, path);
+        await electron.ipcRenderer.invoke('exportBook', { book, outputPath });
         electron.ipcRenderer.off('exportBookProgress', progressHandler);
 
         // @TODO: Need to understand why this only works with a 500ms+ delay
