@@ -115,6 +115,7 @@ class ChatPanel {
 
         // Initialize message viewer and footer
         this.#messageViewer = new MessageViewer(this.node.querySelector('.mp-message-viewer'));
+        this.#messageViewer.showImages = this.#services.datastore.getSetting('showImagesChat');
         this.#messageViewer.on('selectionChange', () => this.#updateFooter());
         this.#messageFooter = new MessageFooter(this.node.querySelector('.mp-message-footer'));
         this.#messageFooter.on('action', () => this.#addSelectionToBook());
@@ -123,6 +124,7 @@ class ChatPanel {
 
     #initializeEvents() {
         this.#services.datastore.on('chatNameChange', () => this.#updateChatName());
+        this.#services.datastore.on('settingChange', (key, value) => this.#settingChange(key, value));
     }
 
     async #openSlideshow() {
@@ -146,6 +148,12 @@ class ChatPanel {
         }
         if (attachments.length) {
             await this.#modals.slideshow.open(attachments);
+        }
+    }
+
+    #settingChange(key, value) {
+        if (key === 'showImagesChat') {
+            this.#messageViewer.showImages = value;
         }
     }
 
